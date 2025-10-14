@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Courses</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f8fc;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* SIDEBAR */
+.sidebar {
+  width: 220px;
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding: 20px 0;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding-left: 0; /* Xóa khoảng trắng bên trái của danh sách */
+  margin-left: 0;  /* Đảm bảo không có margin thừa */
+}
+.sidebar ul i {
+  padding: 5px;
+}
+
+/* .sidebar li {
+  padding: 15px 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar li:hover {
+  background-color: #f0f2ff;
+  color: #3b82f6;
+} */
+
+
+
+
+.sidebar li.active a {
+  background-color: #e0f0ff; /* xanh nhạt nhẹ nhàng */
+  color: #0077ff;
+  font-weight: 600;
+  border-left: 4px solid #0077ff;
+}
+
+
+.sidebar a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 20px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.sidebar a:hover {
+  background-color: #D3E7FC;
+  color: #000;
+}
+
+
+    /* Banner section */
+    .banner {
+      background-color: #4E74A8;
+      color: white;
+      padding: 30px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 220px; 
+    }
+
+    .banner-text h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .banner-text p {
+      font-size: 14px;
+      max-width: 500px;
+    }
+
+    .banner img {
+      width: 150px;
+    }
+
+    /* Filter section */
+    .filter-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      /* margin-left: 220px;  */
+    }
+
+    .filter-left {
+      font-weight: bold;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .search-box {
+  position: relative;
+  display: inline-block;
+}
+
+.search-box i {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #555;
+  font-size: 16px;
+}
+      .search-box input {
+  padding: 8px 12px 8px 35px; /* chừa chỗ cho icon */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 200px;
+}
+    select {
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    /* Course grid */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 0 50px 50px;
+      margin-left: 220px;
+    }
+
+    .course-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    .course-card h4 {
+      margin: 10px 0 5px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .course-card p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .progress {
+      margin: 15px 0;
+      background-color: #e5e7eb;
+      border-radius: 10px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 47%;
+      height: 100%;
+      background-color: #4E74A8;
+    }
+
+    .continue-btn {
+      display: inline-block;
+      background-color: #4E74A8;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .continue-btn:hover {
+      background-color: #2e59d9;
+    }
+  </style>
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <ul>
+      <li><a href="Homepage.html"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+    <li><a href="mycourse.html"><i class="fa-solid fa-book"></i> My courses</a></li>
+    <li><a href="roadmap.html"><i class="fa-solid fa-book-open"></i> Roadmap</a></li>
+    <li><a href="progress.html"><i class="fa-solid fa-spinner"></i> Progress</a></li>
+    <li><a href="schedule.html"><i class="fa-solid fa-clock"></i> Schedule</a></li>
+    <li><a href="resources.html"><i class="fa-solid fa-folder-open"></i> Resources</a></li>
+    <li><a href="assistant.html"><i class="fa-brands fa-airbnb"></i> AI Assistant</a></li>
+    </ul>
+  </aside>
+
+
+<script>
+  const currentPage = window.location.pathname.split("/").pop();
+  const menuLinks = document.querySelectorAll(".sidebar li a");
+
+  menuLinks.forEach(link => {
+    const linkPage = link.getAttribute("href");
+    if (linkPage === currentPage) {
+      link.parentElement.classList.add("active");
+    }
+  });
+</script>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="banner-text">
+      <h2>My Courses</h2>
+      <p>Get ready to dive in - our courses are designed for active learning, blending bite-sized lessons with practical exercises.</p>
+    </div>
+    <img src="image\MyCourse.png" alt="Learn Illustration">
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-section">
+    <div class="filter-left">5 Courses</div>
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder= "Search" >
+      <select>
+        <option>All</option>
+        <option>Completed</option>
+        <option>In Progress</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Courses -->
+  <div class="course-grid">
+    <div class="course-card">
+      <small>COURSE</small>
+      <h4>Pronunciation Mastery</h4>
+      <p>Refine your accent, stress, and intonation to sound clear and natural.</p>
+      <div class="progress"><div class="progress-bar"></div></div>
+      <a href="#" class="continue-btn">Continue</a>
+    </div>
+
+    <div class="course-card">
+      <small>COURSE</small>
+      <h4>Pronunciation Mastery</h4>
+      <p>Refine your accent, stress, and intonation to sound clear and natural.</p>
+      <div class="progress"><div class="progress-bar"></div></div>
+      <a href="#" class="continue-btn">Continue</a>
+    </div>
+
+    <div class="course-card">
+      <small>COURSE</small>
+      <h4>Pronunciation Mastery</h4>
+      <p>Refine your accent, stress, and intonation to sound clear and natural.</p>
+      <div class="progress"><div class="progress-bar"></div></div>
+      <a href="#" class="continue-btn">Continue</a>
+    </div>
+
+    <div class="course-card">
+      <small>COURSE</small>
+      <h4>Pronunciation Mastery</h4>
+      <p>Refine your accent, stress, and intonation to sound clear and natural.</p>
+      <div class="progress"><div class="progress-bar"></div></div>
+      <a href="#" class="continue-btn">Continue</a>
+    </div>
+
+    <div class="course-card">
+      <small>COURSE</small>
+      <h4>Pronunciation Mastery</h4>
+      <p>Refine your accent, stress, and intonation to sound clear and natural.</p>
+      <div class="progress"><div class="progress-bar"></div></div>
+      <a href="#" class="continue-btn">Continue</a>
+    </div>
+  </div>
+
+</body>
+</html>
