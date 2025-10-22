@@ -1,13 +1,17 @@
+// File: src/App.js
+
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import AppRoutes from './routes/AppRoutes';
-import './styles/globals.css';
+import { BrowserRouter } from 'react-router-dom';
+import AppRoutes from './routes/AppRoutes'; // Đảm bảo import AppRoutes
+import './index.css'; // Hoặc file CSS toàn cục khác nếu có
 
 function App() {
   return (
-    <Router>
+    // BrowserRouter bao bọc toàn bộ ứng dụng để kích hoạt tính năng routing
+    <BrowserRouter>
+      {/* AppRoutes sẽ quyết định component nào được render dựa trên URL */}
       <AppRoutes />
-    </Router>
+    </BrowserRouter>
   );
 }
 
