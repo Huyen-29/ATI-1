@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import '../Homepage/Homepage.css';
 
 // --- IMPORT YOUR IMAGES HERE ---
@@ -48,8 +50,8 @@ const Header = () => {
                     <a href="#" className="nav-link">Practice Test</a>
                 </nav>
                 <div className="header-actions">
-                    <a href="#" className="btn btn-primary">Sign up</a>
-                    <a href="#" className="btn btn-secondary">Sign in</a>
+                    <Link to="/signup" className="btn btn-primary">Sign up</Link>
+                    <Link to="/Login" className="btn btn-secondary">Sign in</Link>
                 </div>
             </div>
         </header>

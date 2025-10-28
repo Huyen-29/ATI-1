@@ -8,9 +8,11 @@
   justify-content: space-between;
   padding: 0 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  position: sticky;
+  position: fixed; /* Changed to fixed to stay on top */
   top: 0;
+  left: 0; /* Ensure it starts from the left edge */
   z-index: 1000;
+  box-sizing: border-box; /* Include padding in the width calculation */
 }
 
 /* Logo và tên thương hiệu */
@@ -44,6 +46,7 @@
   border: 1px solid #ddd;
   background-color: #f8f9fa;
   font-size: 14px;
+  cursor: pointer;
 }
 
 .nav-link {
