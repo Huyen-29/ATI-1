@@ -1,5 +1,6 @@
 // File: src/components/Sidebar.jsx
 import React from "react";
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHouse,
@@ -17,25 +18,25 @@ const Sidebar = () => {
     <aside className="sidebar">
       <ul>
         <li>
-          <a href="/dashboard"><FontAwesomeIcon icon={faHouse} /> <span>Dashboard</span></a>
+          <Link to="/dashboard"><FontAwesomeIcon icon={faHouse} /> <span>Dashboard</span></Link>
         </li>
         <li>
-          <a href="/mycourse"><FontAwesomeIcon icon={faBook} /> <span>My Courses</span></a>
+          <Link to="/mycourse"><FontAwesomeIcon icon={faBook} /> <span>My Courses</span></Link>
         </li>
         <li>
-          <a href="/roadmap"><FontAwesomeIcon icon={faBookOpen} /> <span>Roadmap</span></a>
+          <Link to="/roadmap"><FontAwesomeIcon icon={faBookOpen} /> <span>Roadmap</span></Link>
         </li>
         <li>
-          <a href="/progress"><FontAwesomeIcon icon={faSpinner} /> <span>Progress</span></a>
+          <Link to="/progress"><FontAwesomeIcon icon={faSpinner} /> <span>Progress</span></Link>
         </li>
         <li>
-          <a href="/schedule"><FontAwesomeIcon icon={faClock} /> <span>Schedule</span></a>
+          <Link to="/schedule"><FontAwesomeIcon icon={faClock} /> <span>Schedule</span></Link>
         </li>
         <li>
-          <a href="/resources"><FontAwesomeIcon icon={faFolderOpen} /> <span>Resources</span></a>
+          <Link to="/resources"><FontAwesomeIcon icon={faFolderOpen} /> <span>Resources</span></Link>
         </li>
         <li>
-          <a href="/assistant"><FontAwesomeIcon icon={faAirbnb} /> <span>AI Assistant</span></a>
+          <Link to="/assistant"><FontAwesomeIcon icon={faAirbnb} /> <span>AI Assistant</span></Link>
         </li>
       </ul>
     </aside>

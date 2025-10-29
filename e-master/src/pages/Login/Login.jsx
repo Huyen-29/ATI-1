@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
 
 const GoogleIcon = () => (
@@ -96,9 +96,9 @@ export default function Login() {
       
       <p className="signup-link">
         Haven't had an account?{' '}
-        <a href="#">
-          Sign in here
-        </a>
+        <Link to="/signup">
+          Sign up here
+        </Link>
       </p>
     </div>
   );

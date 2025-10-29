@@ -124,30 +124,85 @@ body {
 .hero-wave path { fill: var(--white); }
 
 /* --- Features Section --- */
-.features { padding: 6rem 0; background-color: var(--white); }
-.features-header { display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 1rem; }
-@media (min-width: 640px) { .features-header { flex-direction: row; align-items: center; } }
-.features-title-wrapper h2 { font-size: 2rem; font-weight: 700; max-width: 28rem; }
-.features-subtext { display: flex; align-items: center; gap: 0.5rem; color: var(--gray-600); margin-bottom: 3rem; }
+.features { padding: 0.5cm 0; background-color: var(--white); }
+.features .container {
+    /* center features like skills so the title sits above the cards */
+    max-width: 1152px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: block;
+}
+.features-header {
+    /* stack title + button + keep everything centered */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+    margin-bottom: 0;
+}
+/* keep button and title stacked and centered (similar to skills header) */
+.features-header .btn-outline { display: inline-block; margin-top: 0; }
+.features-title-wrapper h2 { font-size: 2rem; font-weight: 700; max-width: none; }
+@media (min-width: 1024px) { .features-title-wrapper h2 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
+.features-subtext { display: flex; justify-content: center; align-items: center; gap: 0.5rem; color: var(--gray-600); margin-bottom: 0.5rem; text-align: center; }
 .spark-icon { width: 1.5rem; height: 1.5rem; color: var(--blue-500); }
-.features-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+.features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    /* constrain and center the grid so cards align under the centered header */
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.25rem;
+}
 @media (min-width: 768px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { .features-grid { grid-template-columns: repeat(3, 1fr); } }
-.feature-card { background-color: var(--white); padding: 1.5rem; border-radius: 0.75rem; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-100); display: flex; align-items: flex-start; gap: 1.25rem; transition: box-shadow 0.2s; }
+.feature-card { background-color: var(--white); padding: 0.875rem; border-radius: 0.75rem; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-100); display: flex; align-items: flex-start; gap: 0.75rem; transition: box-shadow 0.2s; }
 .feature-card:hover { box-shadow: var(--shadow-lg); }
 .feature-icon-wrapper { flex-shrink: 0; width: 3rem; height: 3rem; background-color: var(--blue-50); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 .feature-icon { width: 1.5rem; height: 1.5rem; color: var(--blue-600); }
 .feature-title { font-size: 1.125rem; font-weight: 600; color: var(--gray-900); }
 .feature-description { margin-top: 0.5rem; color: var(--gray-500); }
 
-/* --- Skills Section --- */
-.skills { padding: 6rem 0; background-color: var(--white); }
-.skills-header { text-align: center; margin-bottom: 3rem; }
+.skills { padding: 0.5cm 0; background-color: var(--white); }
+
+.skills .container {
+    /* Center the skills section and stack the header above the cards */
+    max-width: 1152px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: block; /* normal flow so header sits above cards */
+}
+.skills-header { text-align: center; margin-bottom: 1rem; }
 .skills-header h2 { font-size: 2rem; font-weight: 700; color: var(--gray-800); }
 .skills-header p { margin-top: 1rem; font-size: 1.125rem; color: var(--gray-600); }
 .skills-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 640px) { .skills-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .skills-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1024px) {
+    /* switch the cards grid to a single-row flex layout so cards fit horizontally across wide screens */
+    .skills-grid {
+        display: flex;
+        gap: 2rem;
+        align-items: stretch;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+    }
+
+    .skills-grid .skill-card {
+        /* allow cards to grow but cap their width so four fit nicely */
+        flex: 1 1 0;
+        min-width: 220px;
+        max-width: 320px;
+    }
+}
 .skill-card { padding: 2rem; border-radius: 1rem; text-align: center; display: flex; flex-direction: column; align-items: center; transform: translateY(0); transition: transform 0.3s; box-shadow: var(--shadow-md); }
 .skill-card:hover { transform: translateY(-0.5rem); }
 .skill-icon-background { width: 6rem; height: 6rem; border-radius: 50%; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; }
@@ -182,7 +237,7 @@ body {
 .writing .btn-yellow:hover { background-color: var(--yellow-700); }
 
 /* --- Learning Path --- */
-.learning-path { padding: 5rem 0; background-color: var(--white); }
+.learning-path { padding: 0.5cm 0; background-color: var(--white); }
 .learning-path .container { max-width: 896px; }
 .learning-path-card { background-color: var(--blue-600); border-radius: 1.5rem; padding: 2rem; color: var(--white); text-align: center; box-shadow: var(--shadow-xl); }
 @media (min-width: 768px) { .learning-path-card { padding: 3rem; } }
@@ -200,13 +255,13 @@ body {
 .entrance-test-link { margin-top: 2rem; font-size: 0.875rem; color: var(--blue-200); }
 .entrance-test-link a { font-weight: 700; text-decoration: underline; color: var(--blue-200); }
 .entrance-test-link a:hover { color: var(--white); }
-.section-connector { text-align: center; margin-top: 3rem; }
+.section-connector { text-align: center; margin-top: 1.5rem; }
 .connector-icon { width: 2.5rem; height: 2.5rem; color: var(--blue-500); margin: auto; }
 
 /* --- Feedback Section --- */
-.feedback { padding: 5rem 0; background-color: var(--white); }
+.feedback { padding: 0.5cm 0; background-color: var(--white); }
 .feedback .container { max-width: 896px; }
-.feedback-header { text-align: center; margin-bottom: 3rem; }
+.feedback-header { text-align: center; margin-bottom: 1.5rem; }
 .feedback-header h2 { font-size: 2.25rem; font-weight: 700; color: var(--gray-800); }
 .feedback-header p { font-size: 1.125rem; color: var(--gray-500); }
 .testimonial-slider { position: relative; min-height: 15rem; display: flex; align-items: center; justify-content: center; }
@@ -225,7 +280,7 @@ body {
 .dot.active { background-color: var(--blue-600); }
 
 /* --- FAQ Section --- */
-.faq { padding: 5rem 0; background-color: var(--white); }
+.faq { padding: 0.5cm 0; background-color: var(--white); }
 .faq .container { max-width: 896px; }
 .faq-card { background-color: var(--blue-600); border-radius: 1.5rem; padding: 2rem; color: var(--white); box-shadow: var(--shadow-xl); position: relative; overflow: hidden; }
 @media (min-width: 768px) { .faq-card { padding: 3rem; } }
@@ -239,7 +294,7 @@ body {
 .faq-item p { margin-top: 0.5rem; color: var(--blue-100); }
 
 /* --- Footer --- */
-.footer { background-color: var(--white); border-top: 1px solid var(--gray-200); padding: 4rem 0 2rem 0; font-size: 0.875rem; }
+.footer { background-color: var(--white); border-top: 1px solid var(--gray-200); padding: 0.5cm 0 0.5cm 0; font-size: 0.875rem; }
 .footer-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 640px) { .footer-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 1024px) { .footer-grid { grid-template-columns: repeat(6, 1fr); } }
@@ -265,3 +320,55 @@ body {
 .chatbot-button { background-color: var(--blue-600); color: var(--white); width: 4rem; height: 4rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lg); border: none; cursor: pointer; transition: background-color 0.2s; }
 .chatbot-button:hover { background-color: var(--blue-700); }
 .chatbot-icon { width: 2rem; height: 2rem; }
+
+/* ================= DEBUG HELPERS (temporary) ================ */
+/* Add visual outlines/backgrounds to help identify which element creates the large whitespace.
+    Reload the page, look for outlines, then paste a screenshot or tell me which region is large.
+    Remove this block after debugging. */
+.debug-outline-features { outline: 3px solid rgba(255,0,0,0.25) !important; }
+.debug-outline-features-grid { outline: 2px dashed rgba(0,128,0,0.25) !important; }
+.debug-outline-feature-card { outline: 1px dotted rgba(0,0,255,0.15) !important; }
+.debug-outline-skills { outline: 3px solid rgba(255,165,0,0.25) !important; }
+.debug-bg-features-grid { background: rgba(200,230,255,0.04) !important; }
+
+/* Apply the debug classes to the existing selectors so the outlines appear without changing markup */
+.features { position: relative; }
+.features.debug-outline-features { outline: 3px solid rgba(255,0,0,0.08) !important; }
+.features-grid.debug-outline-features-grid { outline: 2px dashed rgba(0,128,0,0.08) !important; background: rgba(200,230,255,0.02) !important; }
+.feature-card.debug-outline-feature-card { outline: 1px dotted rgba(0,0,255,0.06) !important; }
+.skills.debug-outline-skills { outline: 3px solid rgba(255,165,0,0.08) !important; }
+
+/* Shortcut: if you open devtools, add these classes to elements quickly to visualize. */
+/* End debug helpers */
+
+/* Overrides to collapse large gaps between Features and Skills sections when present */
+.features { padding-bottom: 0 !important; }
+.features-grid { margin-bottom: 0 !important; }
+.features + .skills { padding-top: 0 !important; }
+.skills-header { margin-top: 0 !important; }
+.skills-header h2 { margin: 0 !important; }
+
+/* Extra defensive overrides in case other rules add spacing */
+.features, .features .container, .features-grid, .feature-card { padding-bottom: 0 !important; margin-bottom: 0 !important; }
+.features * { margin-bottom: 0 !important; }
+.skills, .skills .container { padding-top: 0 !important; margin-top: 0 !important; }
+.skills * { margin-top: 0 !important; }
+
+/* If a connector element exists between sections, force it small */
+.section-connector { margin-top: 0.2rem !important; margin-bottom: 0 !important; }
+
+/* Strong overrides to collapse remaining gap: pull skills header up slightly */
+.features-grid { margin-bottom: -0.4rem !important; }
+.feature-card { margin-bottom: 0 !important; }
+.skills-header { margin-top: -1rem !important; padding-top: 0 !important; }
+.skills { margin-top: 0 !important; padding-top: 0 !important; }
+.skills + .learning-path { margin-top: 0 !important; }
+
+/* Final: enforce exact 1cm gap between Features and Skills: 0.5cm bottom + 0.5cm top */
+.features { padding-bottom: 0.5cm !important; }
+.features-grid { margin-bottom: 0 !important; }
+.features * { margin-bottom: 0 !important; }
+.skills { padding-top: 0.5cm !important; }
+.skills-header { margin-top: 0 !important; }
+.skills * { margin-top: 0 !important; }
+

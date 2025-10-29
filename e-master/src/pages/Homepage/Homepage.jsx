@@ -51,7 +51,7 @@ const Header = () => {
                 </nav>
                 <div className="header-actions">
                     <Link to="/signup" className="btn btn-primary">Sign up</Link>
-                    <Link to="/Login" className="btn btn-secondary">Sign in</Link>
+                    <Link to="/login" className="btn btn-secondary">Sign in</Link>
                 </div>
             </div>
         </header>
