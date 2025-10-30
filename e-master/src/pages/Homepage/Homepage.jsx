@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+
 import '../Homepage/Homepage.css';
 
 // --- IMPORT YOUR IMAGES HERE ---
@@ -46,7 +47,10 @@ const Header = () => {
                         <ChevronUpIcon className="nav-chevron" />
                     </a>
                     <a href="#" className="nav-link">Building a road map</a>
-                    <a href="#" className="nav-link">Input Testing</a>
+                    {/* <a href="#" className="nav-link">Input Testing</a> */}
+
+                    <Link to="/input-testing" className="nav-link">Input Testing</Link>
+
                     <a href="#" className="nav-link">Practice Test</a>
                 </nav>
                 <div className="header-actions">

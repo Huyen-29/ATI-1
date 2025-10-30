@@ -23,30 +23,30 @@ document.addEventListener("DOMContentLoaded", () => {
         listening: ["Listening Set A", "Listening Set B"],
         reading: ["Reading Part 1", "Reading Part 2", "Reading Part 3"],
         full: ["Full TOEIC Placement Test"]
-      }
-    }
-  };
+      } 
+    } 
+  }; 
 
   // =========================
-  // 2️⃣ HIỂN THỊ CÁC BÀI TEST CHÍNH
+  // 2️⃣ HIỂN THỊ CÁC BÀI TEST CHÍNH 
   // =========================
-  if (testList) {
-    Object.entries(testData).forEach(([key, value]) => {
-      const btn = document.createElement("button");
-      btn.textContent = value.name;
-      btn.classList.add(`${key}-btn`);
-      btn.onclick = () => showSkillOptions(key);
-      testList.appendChild(btn);
-    });
-  }
+  if (testList) { 
+    Object.entries(testData).forEach(([key, value]) => { 
+      const btn = document.createElement("button"); 
+      btn.textContent = value.name; 
+      btn.classList.add(`${key}-btn`); 
+      btn.onclick = () => showSkillOptions(key); 
+      testList.appendChild(btn); 
+    }); 
+  } 
 
-  // =========================
-  // 3️⃣ HIỂN THỊ CÁC KỸ NĂNG
-  // =========================
-  function showSkillOptions(testKey) {
-    testList.style.display = "none";
-    skillOptions.style.display = "block";
-    testOptions.style.display = "none";
+  // ========================= 
+  // 3️⃣ HIỂN THỊ CÁC KỸ NĂNG  
+  // ========================= 
+  function showSkillOptions(testKey) { 
+    testList.style.display = "none"; 
+    skillOptions.style.display = "block"; 
+    testOptions.style.display = "none"; 
 
     // Gắn sự kiện cho từng kỹ năng
     skillOptions.querySelectorAll("button").forEach(skillBtn => {
