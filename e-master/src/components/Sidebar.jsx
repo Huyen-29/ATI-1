@@ -27,9 +27,6 @@ const Sidebar = () => {
           <Link to="/roadmap"><FontAwesomeIcon icon={faBookOpen} /> <span>Roadmap</span></Link>
         </li>
         <li>
-          <Link to="/progress"><FontAwesomeIcon icon={faSpinner} /> <span>Progress</span></Link>
-        </li>
-        <li>
           <Link to="/schedule"><FontAwesomeIcon icon={faClock} /> <span>Schedule</span></Link>
         </li>
         <li>
@@ -38,6 +35,8 @@ const Sidebar = () => {
         <li>
           <Link to="/assistant"><FontAwesomeIcon icon={faAirbnb} /> <span>AI Assistant</span></Link>
         </li>
+        
+      
       </ul>
     </aside>
   );
