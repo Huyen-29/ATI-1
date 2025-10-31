@@ -142,19 +142,33 @@
 
 .courses-list {
   margin-bottom: 20px;
+  display: grid;
+  gap: 16px;
+  /* default single column on small screens */
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .courses-list { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; }
+}
+
+@media (min-width: 1024px) {
+  /* 3 columns on desktop: with 5 items this gives 3 on first row, 2 on second */
+  .courses-list { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 220px; }
 }
 
 .course-card {
   background: white;
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 16px;
+  border-radius: 12px;
+  padding: 20px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  align-items: stretch;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   border-left: 4px solid transparent;
-  transition: all 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  height: 100%; /* fill the grid row height */
 }
 
 .course-card.complete {
@@ -170,7 +184,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  flex: 1;
+  flex: 1 1 auto;
 }
 
 .course-icon {
@@ -198,12 +212,13 @@
 }
 
 .course-progress-bar {
-  width: 180px;
-  height: 8px;
+  width: 100%;
+  max-width: 320px;
+  height: 10px;
   background: #f3f4f6;
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .course-percent {
@@ -222,16 +237,15 @@
   background: #5B86C6;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 18px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: transform 0.12s ease, background 0.18s ease;
+  align-self: flex-start;
 }
 
-.continue-btn:hover {
-  background: #4A6A9A;
-}
+.continue-btn:hover { transform: translateY(-2px); background: #4A6A9A; }
 
 .load-more-btn {
   background: #5B86C6;
