@@ -65,12 +65,12 @@ const CourseCard = ({ course, onContinue }) => {
       <span className="course-card-tag">COURSE</span>
       <h3 className="course-card-title">{course.title}</h3>
       <p className="course-card-description">{course.description}</p>
-      <div className="course-card-progress">
-        <span>{progress}%</span>
-        <div className="progress-bar-container">
-          <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
-        </div>
-      </div>
+            <div className="course-card-progress">
+                <span className="progress-percentage">{progress}%</span>
+                <div className="progress-bar-container">
+                    <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
+                </div>
+            </div>
       <button className="course-card-button" onClick={() => onContinue(course)}>
         Continue
       </button>
