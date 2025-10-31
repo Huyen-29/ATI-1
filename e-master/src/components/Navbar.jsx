@@ -1,6 +1,7 @@
 // File: src/components/Navbar.jsx
 import React from "react";
 import { FaBell, FaUserCircle, FaBars } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -8,8 +9,11 @@ const Navbar = () => {
     <header className="navbar">
       {/* Logo và thương hiệu */}
       <div className="navbar-left">
-        <img src="/assets/images/Logo.png" alt="Logo" className="navbar-logo" />
-        <span className="navbar-brand">E-Master</span>
+        <Link to="/landing" className="navbar-home-link">
+          {/* apply both sets of classes so homepage/landing styles (logo-img/logo-text) and navbar styles both apply */}
+          <img src="/assets/images/Logo.png" alt="Logo" className="logo-img navbar-logo" />
+          <span className="logo-text navbar-brand">E-Master</span>
+        </Link>
       </div>
 
       {/* Menu giữa */}

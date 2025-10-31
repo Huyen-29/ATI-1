@@ -146,8 +146,26 @@ body {
 }
 /* keep button and title stacked and centered (similar to skills header) */
 .features-header .btn-outline { display: inline-block; margin-top: 0; }
-.features-title-wrapper h2 { font-size: 2rem; font-weight: 700; max-width: none; }
-@media (min-width: 1024px) { .features-title-wrapper h2 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
+.features-title-wrapper h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    max-width: none;
+    text-align: center !important;
+    white-space: normal !important;
+    overflow: visible !important;
+}
+
+/* Ensure the title wrapper itself centers content like the master layout */
+.features-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+@media (min-width: 1024px) {
+    /* Ensure title wraps and centers instead of truncating with ellipsis */
+    .features-title-wrapper h2 { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+}
 .features-subtext { display: flex; justify-content: center; align-items: center; gap: 0.5rem; color: var(--gray-600); margin-bottom: 0.5rem; text-align: center; }
 .spark-icon { width: 1.5rem; height: 1.5rem; color: var(--blue-500); }
 .features-grid {
@@ -213,7 +231,13 @@ body {
 .skill-topics { margin-top: 1.5rem; text-align: left; width: 100%; }
 .skill-topics-title { font-weight: 600; color: var(--gray-700); }
 .skill-topics ul { margin-top: 0.5rem; list-style-position: inside; color: var(--gray-500); padding-left: 0; list-style-type: disc; }
-.skill-topics ul li { margin-bottom: 0.25rem; }
+.skill-topics ul li { 
+    margin-bottom: 0.25rem; 
+    /* keep each topic on a single line */
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .btn-start-learning { margin-top: 2rem; width: 100%; padding: 0.75rem; border-radius: 0.5rem; font-weight: 600; color: var(--white); border: none; cursor: pointer; transition: background-color 0.2s; }
 .skill-card.listening { background-color: var(--blue-50); border: 1px solid var(--blue-200); }
 .listening .bg-blue { background-color: var(--blue-100); }
@@ -235,6 +259,19 @@ body {
 .writing .text-yellow { color: var(--yellow-600); }
 .writing .btn-yellow { background-color: var(--yellow-600); }
 .writing .btn-yellow:hover { background-color: var(--yellow-700); }
+
+/* Ensure the top portion of each skill card reserves the same space so 'Key Topics' aligns */
+.skill-top {
+    min-height: 140px; /* adjust if needed to accommodate your longest description */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.skill-top .skill-description { margin-top: 0.5rem; }
+
+/* Footer logo sizing: make sure footer shows the logo image at a reasonable size */
+.footer-logo-column .logo-img, .footer-logo-column img { width: 64px; height: auto; display: inline-block; }
 
 /* --- Learning Path --- */
 .learning-path { padding: 0.5cm 0; background-color: var(--white); }
@@ -282,16 +319,38 @@ body {
 /* --- FAQ Section --- */
 .faq { padding: 0.5cm 0; background-color: var(--white); }
 .faq .container { max-width: 896px; }
-.faq-card { background-color: var(--blue-600); border-radius: 1.5rem; padding: 2rem; color: var(--white); box-shadow: var(--shadow-xl); position: relative; overflow: hidden; }
-@media (min-width: 768px) { .faq-card { padding: 3rem; } }
+.faq-card { background-color: var(--blue-600) !important; border-radius: 2rem; padding: 3rem; color: var(--white); box-shadow: var(--shadow-xl); position: relative; overflow: hidden; max-width: 100%; }
+@media (min-width: 768px) { .faq-card { padding: 3.5rem; } }
 .faq-card::before { content: ''; position: absolute; top: -2.5rem; left: -2.5rem; width: 12rem; height: 12rem; border: 4px solid rgba(255, 255, 255, 0.1); border-radius: 50%; }
 .faq-card::after { content: ''; position: absolute; bottom: -4rem; right: -1.25rem; width: 10rem; height: 10rem; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 50%; }
 .faq-card-content { position: relative; z-index: 1; }
-.faq-card-content h2 { font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 2.5rem; }
+.faq-card-content h2 { font-size: 2.5rem; font-weight: 800; text-align: center; margin-bottom: 2.5rem; }
+
+/* small decorative label above the heading */
+.faq-label { 
+    text-align: center;
+    color: rgba(255,255,255,0.85);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: lowercase;
+    margin-bottom: 0.5rem;
+}
 .faq-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 768px) { .faq-grid { grid-template-columns: 1fr 1fr; } }
 .faq-item h3 { font-weight: 700; font-size: 1.125rem; }
 .faq-item p { margin-top: 0.5rem; color: var(--blue-100); }
+
+/* Style each FAQ entry as a white card inside the blue FAQ container so it matches the screenshot */
+.faq-item {
+    background-color: var(--white);
+    color: var(--gray-800);
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 12px rgba(17,24,39,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.faq-item h3 { color: var(--gray-800); margin: 0; }
+.faq-item p { color: var(--gray-600); margin: 0.5rem 0 0 0; }
 
 /* --- Footer --- */
 .footer { background-color: var(--white); border-top: 1px solid var(--gray-200); padding: 0.5cm 0 0.5cm 0; font-size: 0.875rem; }

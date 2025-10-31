@@ -8,6 +8,7 @@ import AIChat from '../pages/AIChat/AIChat.jsx';
 import InputTesting from '../pages/InputTesting/InputTesting.jsx';
 import Roadmap from '../pages/Roadmap/Roadmap.jsx';
 import MyCourse from '../pages/MyCourse/MyCourse.jsx';
+import Landingpage from '../pages/LandingPage/LandingPage.jsx';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/landing" element={<Landingpage />} />
       <Route path="/roadmap" element={<Roadmap />} />
       <Route path="/mycourse" element={<MyCourse />} />
       <Route path="/assistant" element={<AIChat />} />

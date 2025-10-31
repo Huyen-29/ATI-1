@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
-
-import '../Homepage/Homepage.css';
-
-// --- IMPORT YOUR IMAGES HERE ---
-// Make sure the paths are correct relative to this file.
+import '../LandingPage/LandingPage.css';
+import Navbar from '../../components/Navbar';
+import Sidebar from '../../components/Sidebar';
+// reuse the homepage hero image for the landing banner
 import heroImage from '../../images copy/homepage3.png';
-import logo from '../../images copy/Logo.png';
 
+// Note: In a real app with routing, you would use <Link> from react-router-dom
+// For this self-contained example, we'll use <a> tags.
 
-// --- ICONS ---
-const LogoIcon = ({ className }) => ( <svg className={className} width="40" height="32" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M25 6L0 16L25 26L50 16L25 6Z" fill="#3B82F6"/><path d="M42.5 19V27.5C42.5 27.5 35 32.5 25 32.5C15 32.5 7.5 27.5 7.5 27.5V19L2.5 21.5V29C2.5 29 15 37.5 25 37.5C35 37.5 47.5 29 47.5 29V21.5L42.5 19Z" fill="#2563EB"/></svg> );
+// --- ICONS (ALL CONSOLIDATED HERE) ---
 const ChevronUpIcon = ({ className }) => ( <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" /></svg> );
-const PlayIcon = ({ className }) => ( <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.647c1.295.742 1.295 2.545 0 3.286L7.279 20.99c-1.25.717-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" /></svg> );
 const StarIcon = ({ className, filled = true }) => ( <svg className={`${className} ${filled ? 'star-icon-filled' : 'star-icon-empty'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.007z" clipRule="evenodd" /></svg> );
 const SparkIcon = ({ className }) => ( <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path fillRule="evenodd" d="M9.315 7.584C12.195 3.883 16.695 1.5 21.75 1.5a.75.75 0 0 1 .75.75c0 5.056-2.383 9.555-6.084 12.436A6.75 6.75 0 0 1 9.75 22.5a.75.75 0 0 1-.75-.75v-7.19c0-.478.362-.875.834-.944.472-.07.923.182 1.15.587a.75.75 0 0 0 1.298-.75Z" clipRule="evenodd" /></svg> );
 const PersonalizedLearningIcon = ({ className }) => ( <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg> );
@@ -32,88 +28,6 @@ const InstagramIcon = ({ className }) => ( <svg className={`${className} social-
 const YoutubeIcon = ({ className }) => ( <svg className={`${className} social-icon-youtube`} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.78 22 12 22 12s0 3.22-.42 4.814c-.23.861-.907 1.538-1.768 1.768C18.22 19 12 19 12 19s-6.22 0-7.812-.42c-.861-.23-1.538-.907-1.768-1.768C2.002 15.22 2 12 2 12s0-3.22.42-4.814c.23-.861.907-1.538 1.768-1.768C5.78 5 12 5 12 5s6.22 0 7.812.418ZM15.19 12 10 8.814v6.372L15.19 12Z" clipRule="evenodd" /></svg> );
 const ChatbotIcon = ({ className }) => ( <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fillRule="evenodd" d="M4.848 2.771A49.144 49.144 0 0 1 12 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.026 3.348 3.97v6.02c0 1.943-1.37 3.678-3.348 3.97a48.901 48.901 0 0 1-3.476.383.39.39 0 0 0-.297.15l-2.11 2.637a.39.39 0 0 1-.595 0l-2.11-2.637a.39.39 0 0 0-.297-.15 48.9 48.9 0 0 1-3.476-.384c-1.978-.29-3.348-2.026-3.348-3.97V6.74c0-1.944 1.37-3.68 3.348-3.97ZM6.75 8.25a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H7.5Z" clipRule="evenodd" /></svg> );
 
-// --- HEADER ---
-const Header = () => {
-    return (
-        <header className="header">
-            <div className="header-container">
-                <div className="logo">
-                    <img src={logo} alt="E-Master Logo" className="logo-img"/>
-                    <span className="logo-text">E-Master</span>
-                </div>
-                <nav className="main-nav">
-                    <a href="#" className="nav-link active">
-                        IELTS
-                        <ChevronUpIcon className="nav-chevron" />
-                    </a>
-                    <a href="#" className="nav-link">Building a road map</a>
-                    {/* <a href="#" className="nav-link">Input Testing</a> */}
-
-                    <Link to="/input-testing" className="nav-link">Input Testing</Link>
-
-                    <a href="#" className="nav-link">Practice Test</a>
-                </nav>
-                <div className="header-actions">
-                    <Link to="/signup" className="btn btn-primary">Sign up</Link>
-                    <Link to="/login" className="btn btn-secondary">Sign in</Link>
-                </div>
-            </div>
-        </header>
-    );
-};
-
-// --- HERO ---
-const Hero = () => {
-  return (
-    <section className="hero">
-        <Header />
-        <div className="container hero-content-container">
-            <div className="hero-content">
-                <div className="hero-text">
-                    <h1>Comprehensive IELTS/TOEIC Study & Practice Roadmap</h1>
-                    <p>Master English step by step with a clear roadmap tailored for IELTS & TOEIC success. Boost your skills with proven strategies and practice materials designed to help you achieve your goals.</p>
-                    <div className="hero-actions">
-                        <button className="btn btn-start">Start Now</button>
-                        <button className="btn-play">
-                            <PlayIcon className="play-icon" />
-                        </button>
-                    </div>
-                    <div className="hero-stats">
-                        <div className="stat-group">
-                            <div className="user-avatars">
-                                <img src="https://randomuser.me/api/portraits/women/71.jpg" alt="User 1"/>
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User 2"/>
-                                <img src="https://randomuser.me/api/portraits/women/57.jpg" alt="User 3"/>
-                            </div>
-                            <div>
-                                <p className="stat-number">4,359</p>
-                                <p className="stat-label">Study IELTS at E-Master</p>
-                            </div>
-                        </div>
-                        <div className="stat-divider"></div>
-                        <div className="stat-group">
-                            <div>
-                                <p className="stat-number">4.8/5</p>
-                                <div className="stars">
-                                    {[...Array(5)].map((_, i) => <StarIcon key={i} filled={i < 4} />)}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="hero-image-container">
-                    <img src={heroImage} alt="Two smiling female students" className="hero-image"/>
-                </div>
-            </div>
-        </div>
-        <div className="hero-wave">
-            <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                <path d="M0 50C240 20 480 20 720 50C960 80 1200 80 1440 50V100H0V50Z"></path>
-            </svg>
-        </div>
-    </section>
-  );
-};
 
 // --- FEATURES ---
 const FeatureCard = ({ icon, title, description }) => (
@@ -161,13 +75,15 @@ const Features = () => {
 const SkillCard = ({ icon, title, description, keyTopics, cardClass, theme }) => {
     return (
         <div className={`skill-card ${cardClass}`}>
-            <div className={`skill-icon-background ${theme.bg}`}>
-                <div className="skill-icon-container">
-                        {React.cloneElement(icon, { className: `skill-icon ${theme.text}` })}
+            <div>
+                <div className={`skill-icon-background ${theme.bg}`}>
+                    <div className="skill-icon-container">
+                            {React.cloneElement(icon, { className: `skill-icon ${theme.text}` })}
+                    </div>
                 </div>
             </div>
 
-            {/* top area: icon/title/description - keep consistent height so Key Topics align */}
+            {/* top area: icon/title/description - flexible so topics align across cards */}
             <div className="skill-top">
                 <h3>{title}</h3>
                 <p className="skill-description">{description}</p>
@@ -250,75 +166,7 @@ const LearningPath = () => {
     );
 };
 
-// --- FEEDBACK ---
-const Feedback = () => {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const testimonials = [
-        { quote: "I like E-master the most in the part where the teachers correct my test and the Virtual Speaking room because it helps me reduce the pressure when taking the real test thanks to having an environment to practice my reflexes beforehand.", name: "Ana Vitória", title: "Teacher", avatar: "https://randomuser.me/api/portraits/women/68.jpg" },
-        { quote: "The personalized learning path was a game-changer for me. It focused on my weak areas and helped me improve my score from 5.5 to 7.0 in just three months. Highly recommended!", name: "Fernando Silva", title: "Professor", avatar: "https://randomuser.me/api/portraits/men/66.jpg" },
-        { quote: "The community is amazing. Practicing with other students from around the world gave me the confidence I needed for the speaking test. The AI support was also incredibly helpful for writing.", name: "Yuki Tanaka", title: "Student", avatar: "https://randomuser.me/api/portraits/women/44.jpg" }
-    ];
-    return (
-        <section className="feedback">
-            <div className="container">
-                <div className="feedback-header">
-                    <h2>Feedback</h2>
-                    <p>From the Student's Side</p>
-                </div>
-                <div className="testimonial-slider">
-                    {testimonials.map((testimonial, index) => (
-                        <div key={index} className={`testimonial-slide ${index === activeIndex ? 'active' : ''}`}>
-                            {index === activeIndex && (
-                                <div className="testimonial-content">
-                                    <img src={testimonial.avatar} alt={testimonial.name} className="testimonial-avatar" />
-                                    <div className="testimonial-text">
-                                        <p className="quote">"{testimonial.quote}"</p>
-                                        <p className="author-name">{testimonial.name}</p>
-                                        <p className="author-title">{testimonial.title}</p>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-                <div className="testimonial-dots">
-                    {testimonials.map((_, index) => (
-                        <button key={index} onClick={() => setActiveIndex(index)} className={`dot ${activeIndex === index ? 'active' : ''}`} aria-label={`Go to testimonial ${index + 1}`} />
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
-
-// --- FAQ ---
-const Faq = () => {
-    const faqs = [
-        { question: "Is this program free?", answer: "Yes, it's 100% FREE!" },
-        { question: "Is this website for beginners?", answer: "As long as you can understand this page, you're good to go! But it's better if you know basic English pronunciation." },
-        { question: "How long will it take to become fluent with this website?", answer: "It depends on many things (such as your current level, how many hours you will spend each day)." },
-        { question: "Will my speaking skills improve using this method?", answer: "Speaking and listening skills are related together, once you have better listening skills, it's much easier and faster to improve your speaking skills." }
-    ];
-    return (
-        <section className="faq">
-            <div className="container">
-                <div className="faq-card">
-                    <div className="faq-card-content">
-                        <h2>Frequently asked question</h2>
-                        <div className="faq-grid">
-                            {faqs.map((faq, index) => (
-                                <div key={index} className="faq-item">
-                                    <h3>{faq.question}</h3>
-                                    <p>{faq.answer}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-};
+// Feedback and FAQ sections removed from landing page by request.
 
 // --- FOOTER ---
 const PageFooter = () => {
@@ -328,7 +176,7 @@ const PageFooter = () => {
                 <div className="footer-grid">
                     <div className="footer-logo-column">
                         <div className="logo">
-                            <img src={logo} alt="E-Master Logo" className="logo-img"/>
+                            <img src="https://emasters.io.vn/images/Logo.png" alt="E-Master Logo" className="logo-img"/>
                             <span className="logo-text">E-Master</span>
                         </div>
                     </div>
@@ -381,21 +229,52 @@ const PageFooter = () => {
     );
 };
 
-// --- HOMEPAGE COMPONENT ---
-const Homepage = () => {
-  return (
-    <div className="homepage-wrapper">
-      <main>
-        <Hero />
-        <Features />
-        <Skills />
-        <LearningPath />
-        <Feedback />
-        <Faq />
-      </main>
-      <PageFooter />
-    </div>
-  );
-};
+// --- LANDINGPAGE COMPONENT ---
+const Landingpage = () => {
+        return (
+            <div className="dashboard-layout">
+                <Navbar />
+                <div className="dashboard-content">
+                    <Sidebar />
+                    <main className="dashboard-main landing-page-main">
+                        <div className="landing-page-wrapper">
 
-export default Homepage;
+                            {/* Banner / Hero (adapted from Homepage) */}
+                            <section className="hero">
+                                <div className="container hero-content-container">
+                                    <div className="hero-content">
+                                        <div className="hero-text">
+                                            <h1>Comprehensive IELTS/TOEIC Study & Practice Roadmap</h1>
+                                            <p>Master English step by step with a clear roadmap tailored for IELTS & TOEIC success. Boost your skills with proven strategies and practice materials designed to help you achieve your goals.</p>
+                                            <div className="hero-actions">
+                                                <button className="btn btn-start">Start Now</button>
+                                            </div>
+                                        </div>
+                                        <div className="hero-image-container">
+                                            <img src={heroImage} alt="Students" className="hero-image" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="hero-wave">
+                                    <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                                        <path d="M0 50C240 20 480 20 720 50C960 80 1200 80 1440 50V100H0V50Z"></path>
+                                    </svg>
+                                </div>
+                            </section>
+
+                            <main className="landing-page-content">
+                                <Features />
+                                <Skills />
+                                <LearningPath />
+                                {/* Feedback and FAQ removed as requested */}
+                            </main>
+
+                            <PageFooter />
+                        </div>
+                    </main>
+                </div>
+            </div>
+        );
+    };
+
+export default Landingpage;
