@@ -4,6 +4,7 @@ import { FaBell, FaUserCircle, FaBars } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import "./Navbar.css";
 
+
 const Navbar = () => {
   return (
     <header className="navbar">
@@ -23,7 +24,9 @@ const Navbar = () => {
           <option>TOEIC</option>
         </select>
         <a href="#" className="nav-link">Building a road map</a>
-        <a href="#" className="nav-link">Input Testing</a>
+        {/* <a href="#" className="nav-link">Input Testing</a> */}
+         <Link to="/input-testing" className="nav-link">Input Testing</Link>
+        
         <a href="#" className="nav-link">Practice Test</a>
       </div>
 

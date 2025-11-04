@@ -9,6 +9,8 @@ import InputTesting from '../pages/InputTesting/InputTesting.jsx';
 import Roadmap from '../pages/Roadmap/Roadmap.jsx';
 import MyCourse from '../pages/MyCourse/MyCourse.jsx';
 import Landingpage from '../pages/LandingPage/LandingPage.jsx';
+import Schedule from "../pages/Schedule/Schedule.jsx";
+
 
 export default function App() {
   return (
@@ -22,6 +24,9 @@ export default function App() {
       <Route path="/mycourse" element={<MyCourse />} />
       <Route path="/assistant" element={<AIChat />} />
       <Route path="/input-testing" element={<InputTesting />} />
+      <Route path="/schedule" element={<Schedule />} />
+
+
     </Routes>
   );
 }
