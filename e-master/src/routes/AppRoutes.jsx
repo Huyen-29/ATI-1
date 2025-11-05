@@ -9,6 +9,7 @@ import InputTesting from '../pages/InputTesting/InputTesting.jsx';
 import Roadmap from '../pages/Roadmap/Roadmap.jsx';
 import MyCourse from '../pages/MyCourse/MyCourse.jsx';
 import Landingpage from '../pages/LandingPage/LandingPage.jsx';
+import Resources from '../pages/Resources/Resource.jsx';
 import Schedule from "../pages/Schedule/Schedule.jsx";
 
 
@@ -21,6 +22,7 @@ export default function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/landing" element={<Landingpage />} />
       <Route path="/roadmap" element={<Roadmap />} />
+      <Route path="/resources" element={<Resources />} />
       <Route path="/mycourse" element={<MyCourse />} />
       <Route path="/assistant" element={<AIChat />} />
       <Route path="/input-testing" element={<InputTesting />} />
