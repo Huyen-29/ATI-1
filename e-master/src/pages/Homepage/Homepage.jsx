@@ -46,12 +46,11 @@ const Header = () => {
                         IELTS
                         <ChevronUpIcon className="nav-chevron" />
                     </a>
-                    <a href="#" className="nav-link">Building a road map</a>
-                    {/* <a href="#" className="nav-link">Input Testing</a> */}
-
+                
+                    <Link to="/roadmap" className="nav-link">Building a Roadmap</Link>
                     <Link to="/input-testing" className="nav-link">Input Testing</Link>
 
-                    <a href="#" className="nav-link">Practice Test</a>
+                    <Link to="/practice-test" className="nav-link">Practice Test</Link>
                 </nav>
                 <div className="header-actions">
                     <Link to="/signup" className="btn btn-primary">Sign up</Link>

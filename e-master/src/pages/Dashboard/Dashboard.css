@@ -191,12 +191,12 @@
 .course-icon {
   width: 48px;
   height: 48px;
-  background: #DBEAFE;
+  background: #3B82F6; /* stronger primary blue */
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #3B82F6;
+  color: #ffffff;
 }
 
 .course-details h4 {

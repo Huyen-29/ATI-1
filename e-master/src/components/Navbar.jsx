@@ -23,11 +23,11 @@ const Navbar = () => {
           <option>IELTS</option>
           <option>TOEIC</option>
         </select>
-        <a href="#" className="nav-link">Building a road map</a>
-        {/* <a href="#" className="nav-link">Input Testing</a> */}
-         <Link to="/input-testing" className="nav-link">Input Testing</Link>
-        
-        <a href="#" className="nav-link">Practice Test</a>
+       <Link to="/building-roadmap" className="nav-link">Building a road map</Link>
+        {/* <Link to="/input-testing" className="nav-link">Input Testing</Link> */}
+        <Link to="/input-testing" className="nav-link">Input Testing</Link>
+
+        <Link to="/practice-test" className="nav-link">Practice Test</Link>
       </div>
 
       {/* Nút bên phải */}

@@ -214,38 +214,45 @@ section {
   align-items: stretch;
 }
 .skill-card {
-  background-color: var(--bg-light);
+  /* Pale blue card like the reference: subtle blue background, soft border and shadow */
+  background-color: #eef6ff; /* very light blue */
   border-radius: 16px;
-  padding: 2rem;
+  padding: 2.25rem 2rem;
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   /* stretch to fill the grid row so Key Topics line up across cards */
   height: 100%;
+  border: 1px solid rgba(59,130,246,0.12);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
 }
 .skill-icon-background {
-  width: 80px;
-  height: 80px;
+  /* outer ring */
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
   margin: 0 auto 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: rgba(59,130,246,0.08);
 }
 .skill-icon-container {
-    background-color: var(--bg-white);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  /* inner white circle */
+  background-color: #ffffff;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 6px 14px rgba(15,23,42,0.04);
 }
 
-.skill-icon { width: 32px; height: 32px; }
-.skill-card h3 { font-size: 1.5rem; margin: 0 0 1rem; }
-.skill-description { color: var(--text-light); margin-bottom: 2rem; }
+.skill-icon { width: 32px; height: 32px; color: var(--primary-color); }
+.skill-card h3 { font-size: 1.8rem; margin: 0 0 1rem; font-weight: 800; color: var(--text-dark); }
+.kill-description, .skill-description { color: var(--text-light); margin-bottom: 2rem; line-height: 1.6; }
 .skill-top { /* top wrapper holds icon/title/description and grows */
   flex: 1 1 auto;
   display: flex;

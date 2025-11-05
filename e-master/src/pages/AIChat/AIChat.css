@@ -37,13 +37,13 @@
 }
 
 .logo-icon-bg {
-  background-color: var(--light-blue);
+  background-color: var(--primary-blue);
   border-radius: 8px;
   padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-blue);
+  color: #ffffff;
 }
 
 .logo-container h1 {
@@ -336,8 +336,8 @@
 }
 
 .user-bubble {
-  background-color: #DBEAFE;
-  color: #1E40AF;
+  background-color: var(--primary-blue);
+  color: #ffffff;
   border-top-right-radius: 4px;
 }
 
@@ -370,7 +370,8 @@
     color: var(--primary-blue);
 }
 .input-wrapper .send-btn:hover {
-    background-color: #DBEAFE;
+  background-color: var(--primary-blue);
+  color: #ffffff;
 }
 
 
