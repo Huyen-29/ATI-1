@@ -1,6 +1,6 @@
 // File: src/components/Navbar.jsx
 import React from "react";
-import { FaBell, FaUserCircle, FaBars } from "react-icons/fa";
+import { FaBell, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import "./Navbar.css";
 
@@ -37,7 +37,9 @@ const Navbar = () => {
         <Link to="/profile" className="nav-avatar-link" aria-label="Open profile">
           <FaUserCircle className="icon user" />
         </Link>
-        <FaBars className="icon menu" />
+        <Link to="/logout" className="nav-logout-link" aria-label="Logout">
+          <FaSignOutAlt className="icon menu" />
+        </Link>
       </div>
     </header>
   );
