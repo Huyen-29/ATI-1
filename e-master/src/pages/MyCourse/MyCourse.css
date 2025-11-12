@@ -150,7 +150,7 @@
 }
 
 .course-card-button {
-  background-color: var(--primary-blue);
+  background-color: var(--blue-600);
   color: white;
   border: none;
   border-radius: var(--border-radius);
@@ -161,7 +161,7 @@
 }
 
 .course-card-button:hover {
-  background-color: #4338ca;
+  background-color: #2e4e85;
 }
 
 

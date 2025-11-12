@@ -10,7 +10,7 @@ import './Dashboard.css';
 const Dashboard = () => {
   const [courses, setCourses] = useState([
     { id: 1, title: 'Pronunciation Mastery', progress: 47, status: '' },
-    { id: 2, title: 'Pronunciation Mastery', progress: 47, status: 'Complete' },
+    { id: 2, title: 'Pronunciation Mastery', progress: 47, status: '' },
     { id: 3, title: 'Pronunciation Mastery', progress: 47, status: '' }
   ]);
 
@@ -24,6 +24,7 @@ const Dashboard = () => {
       <div className="dashboard-content">
         <Sidebar />
         <main className="dashboard-main">
+          <div className="dashboard-card">
           {/* Dashboard Header */}
           <section className="dashboard-header">
             <div className="header-left">
@@ -52,7 +53,6 @@ const Dashboard = () => {
               <span className="streak-number">2</span>
             </div>
           </section>
-
           {/* Courses List */}
           <section className="courses-section">
             <div className="courses-list">
@@ -78,7 +78,6 @@ const Dashboard = () => {
             </div>
             <button className="load-more-btn" onClick={handleLoadMore}>Load more</button>
           </section>
-
           {/* Skills Breakdown */}
           <section className="skills-breakdown">
             <h2>Skills breakdown</h2>
@@ -106,6 +105,7 @@ const Dashboard = () => {
               </div>
             </div>
           </section>
+          </div>
         </main>
       </div>
     </div>
