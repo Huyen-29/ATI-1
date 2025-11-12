@@ -27,11 +27,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-sky-50);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  display: block; /* let page sections control layout individually */
   min-height: 100vh;
   padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+/* Page wrapper for profile pages so content centers below a fixed navbar */
+.profile-page-wrapper {
+  min-height: calc(100vh - 70px); /* 70px equals navbar height */
+  display: flex;
+  align-items: center; /* vertical center within available area */
+  justify-content: center; /* horizontal center */
+  padding: 2rem 1rem; /* preserve page padding */
   box-sizing: border-box;
 }
 
@@ -53,6 +61,21 @@ body {
   color: var(--color-slate-800);
   margin: 0 0 1.5rem 0; /* mb-6 */
   text-align: center;
+}
+
+/* Two title variants: top (default) and inline (inside form when editing) */
+.profile-title.inline {
+  display: none;
+  text-align: left;
+  margin: 0 0 1rem 0;
+}
+
+.profile-container.editing > .profile-title.top {
+  display: none; /* hide top title while editing */
+}
+
+.profile-container.editing .profile-title.inline {
+  display: block;
 }
 
 /* --- Avatar Section --- */
@@ -147,7 +170,7 @@ body {
 .display-text-area {
   white-space: pre-wrap;
   word-break: break-word;
-  align-items: flex-start;
+  align-items: center;
 }
 
 /* --- Actions & Buttons --- */
@@ -219,5 +242,66 @@ body {
 @media (min-width: 768px) { /* md breakpoint */
   .profile-container {
     padding: 2.5rem; /* md:p-10 */
+  }
+}
+
+/* --- Editing: horizontal layout (desktop) --- */
+@media (min-width: 768px) {
+  /* Wider editing card and grid layout so fields can be longer and actions sit below the fields */
+  .profile-container.editing {
+    max-width: 1100px; /* allow wider editing area */
+  }
+
+  .profile-container form {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    grid-column-gap: 2rem;
+    align-items: start;
+    width: 100%;
+  }
+
+  /* Avatar stays in left column and spans rows */
+  .profile-container .avatar-section {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin-bottom: 0;
+    align-items: flex-start;
+  }
+
+  .profile-container .avatar-wrapper {
+    margin-bottom: 0;
+  }
+
+  .profile-container .avatar-image {
+    width: 6.5rem;
+    height: 6.5rem;
+  }
+
+  /* Form fields and actions occupy the right column */
+  .profile-container .form-fields {
+    grid-column: 2;
+    flex: none;
+    min-width: 0;
+  }
+
+  /* Ensure controls expand to the available right-column width */
+  .profile-container .form-control {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .profile-container .form-fields > *:not(:first-child) {
+    margin-top: 1rem; /* reduced vertical spacing inside column */
+  }
+
+  .profile-container .actions-container {
+    grid-column: 2;
+    margin-top: 1.5rem;
+    justify-content: center; /* buttons centered below the form */
+    width: 100%;
+  }
+
+  .profile-container .btn {
+    width: auto;
   }
 }

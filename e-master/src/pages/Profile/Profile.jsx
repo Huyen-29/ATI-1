@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
+import Navbar from '../../components/Navbar';
 
 const CameraIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,10 +82,15 @@ const Profile = () => {
     };
     
     return (
-        <div className="profile-container">
-            <h1 className="profile-title">My Profile</h1>
+        <div>
+            <Navbar />
+            <main className="profile-page-wrapper">
+            <div className={"profile-container" + (isEditing ? " editing" : "")}>
+            <h1 className="profile-title top">My Profile</h1>
 
             <form onSubmit={handleSubmit}>
+                {/* Inline title shown only when editing (moves into the right column) */}
+                <h1 className="profile-title inline">My Profile</h1>
                 <div className="avatar-section">
                     <div
                         className="avatar-wrapper"
@@ -178,6 +184,8 @@ const Profile = () => {
                     )}
                 </div>
             </form>
+            </div>
+            </main>
         </div>
     );
 };
