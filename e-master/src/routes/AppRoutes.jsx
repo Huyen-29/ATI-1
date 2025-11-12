@@ -13,6 +13,7 @@ import Resources from '../pages/Resources/Resource.jsx';
 import BuildingRoadmap from '../pages/BuildingRoadMap/BuildingRoadMap.jsx';
 import Schedule from "../pages/Schedule/Schedule.jsx";
 import Onboarding from '../pages/Onboarding/Onboarding.jsx';
+import Profile from '../pages/Profile/Profile.jsx';
 
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
       <Route path="/input-testing" element={<InputTesting />} />
       <Route path="/schedule" element={<Schedule />} />
       <Route path="/onboarding" element={<Onboarding />} />
+      <Route path="/profile" element={<Profile />} />
 
 
     </Routes>

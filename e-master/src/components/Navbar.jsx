@@ -33,7 +33,10 @@ const Navbar = () => {
       {/* Nút bên phải */}
       <div className="navbar-right">
         <FaBell className="icon bell" />
-        <FaUserCircle className="icon user" />
+        {/* Click vào avatar trong header sẽ điều hướng tới /profile */}
+        <Link to="/profile" className="nav-avatar-link" aria-label="Open profile">
+          <FaUserCircle className="icon user" />
+        </Link>
         <FaBars className="icon menu" />
       </div>
     </header>
