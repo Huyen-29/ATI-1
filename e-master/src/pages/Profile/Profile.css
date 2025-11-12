@@ -27,7 +27,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-sky-50);
-  display: block; /* let page sections control layout individually */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   min-height: 100vh;
   padding: 2rem 1rem;
   box-sizing: border-box;
