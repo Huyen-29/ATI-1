@@ -12,6 +12,7 @@ import Landingpage from '../pages/LandingPage/LandingPage.jsx';
 import Resources from '../pages/Resources/Resource.jsx';
 import BuildingRoadmap from '../pages/BuildingRoadMap/BuildingRoadMap.jsx';
 import Schedule from "../pages/Schedule/Schedule.jsx";
+import Onboarding from '../pages/Onboarding/Onboarding.jsx';
 
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
       <Route path="/assistant" element={<AIChat />} />
       <Route path="/input-testing" element={<InputTesting />} />
       <Route path="/schedule" element={<Schedule />} />
+      <Route path="/onboarding" element={<Onboarding />} />
 
 
     </Routes>

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../Sign up/Signup.css';
+import authService from '../../services/authService';
 
 const GoogleIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" className="google-icon">
@@ -19,13 +20,27 @@ export default function SignUp() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log({ username, email, password });
+    const [isLoading, setIsLoading] = useState(false);
 
-        // TODO: replace with real signup API call. After successful signup, navigate to onboarding.
-        // For now assume success and redirect to onboarding page.
-        navigate('/onboarding');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        try {
+            const resp = await authService.signup({ username, email, password });
+            if (resp && resp.success) {
+                // Navigate to onboarding on success
+                navigate('/onboarding');
+            } else {
+                const msg = resp && resp.message ? resp.message : 'Signup failed';
+                alert(msg);
+            }
+        } catch (err) {
+            console.error('Signup error', err);
+            alert('An error occurred while signing up. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -63,8 +78,8 @@ export default function SignUp() {
                         </label>
                         <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-input" required />
                     </div>
-                    <button type="submit" className="submit-btn">
-                        Submit
+                    <button type="submit" className="submit-btn" disabled={isLoading}>
+                        {isLoading ? 'Signing up...' : 'Submit'}
                     </button>
                 </form>
 
