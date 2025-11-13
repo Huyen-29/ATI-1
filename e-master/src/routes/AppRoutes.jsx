@@ -16,6 +16,7 @@ import Onboarding from '../pages/Onboarding/Onboarding.jsx';
 import Profile from '../pages/Profile/Profile.jsx';
 import Logout from '../pages/Logout/Logout.jsx';
 import LogoutSuccess from '../pages/Logout/LogoutSuccess.jsx';
+import PracticeTest from '../pages/PracticeTest/PracticeTest.jsx';
 
 
 export default function App() {
@@ -35,9 +36,9 @@ export default function App() {
       <Route path="/schedule" element={<Schedule />} />
       <Route path="/onboarding" element={<Onboarding />} />
       <Route path="/profile" element={<Profile />} />
-  <Route path="/logout" element={<Logout />} />
-  <Route path="/logout/success" element={<LogoutSuccess />} />
-
+      <Route path="/logout" element={<Logout />} />
+      <Route path="/logout/success" element={<LogoutSuccess />} />
+      <Route path="/practice-test" element={<PracticeTest />} />
 
     </Routes>
   );

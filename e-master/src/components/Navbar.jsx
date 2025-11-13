@@ -26,8 +26,7 @@ const Navbar = () => {
        <Link to="/building-roadmap" className="nav-link">Building a road map</Link>
         {/* <Link to="/input-testing" className="nav-link">Input Testing</Link> */}
         <Link to="/input-testing" className="nav-link">Input Testing</Link>
-
-        <Link to="/practice-test" className="nav-link">Practice Test</Link>
+        <Link to="/practice-test" className="nav-link">PracticeTest</Link>
       </div>
 
       {/* Nút bên phải */}
