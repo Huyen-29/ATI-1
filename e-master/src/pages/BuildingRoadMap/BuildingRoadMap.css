@@ -297,6 +297,12 @@ body {
     text-align: center;
     margin: 0 0 1.5rem;
 }
+
+/* Ensure enrollment heading is fully visible on gradient background */
+.enrollment-card h3 {
+    color: #ffffff;
+    opacity: 1;
+}
 .cta-button {
     display: block;
     width: 100%;

@@ -306,10 +306,10 @@ section {
   padding: 4rem;
   text-align: center;
 }
-.learning-path-card h2 { font-size: 2.5rem; margin: 0 0 0.5rem; }
+.learning-path-card h2 { font-size: 2.5rem; margin: 0 0 0.5rem; color: #ffffff; opacity: 1; }
 .learning-path-card p { opacity: 0.9; margin: 0 0 3rem; }
 .learning-path-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 1.5rem; }
-.learning-path-grid h3 { font-size: 1.25rem; margin-bottom: 1.5rem; text-align: left; }
+.learning-path-grid h3 { font-size: 1.25rem; margin-bottom: 1.5rem; text-align: left; color: #ffffff; opacity: 1; font-weight: 700; }
 .options-box {
     background-color: rgba(255,255,255,0.1);
     border-radius: 12px;
@@ -383,6 +383,7 @@ section {
   padding: 4rem;
 }
 .faq-card-content h2 { font-size: 2.5rem; font-weight: 800; margin: 0 0 3rem; text-align: center; }
+.faq-card-content h2 { font-size: 2.5rem; font-weight: 800; margin: 0 0 3rem; text-align: center; color: #ffffff; opacity: 1; }
 .faq-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
