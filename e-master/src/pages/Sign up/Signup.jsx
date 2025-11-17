@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import '../Sign up/Signup.css';
 import authService from '../../services/authService';
 
@@ -19,7 +19,7 @@ export default function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-
+    const location = useLocation();
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -29,8 +29,16 @@ export default function SignUp() {
         try {
             const resp = await authService.signup({ username, email, password });
             if (resp && resp.success) {
-                // Navigate to onboarding on success
-                navigate('/onboarding');
+                // Persist a simple auth flag (mock) and navigate
+                try {
+                    localStorage.setItem('user', JSON.stringify(resp.user));
+                } catch (err) {
+                    console.warn('Could not save user to localStorage', err);
+                }
+
+                // Navigate to onboarding or redirect target if provided
+                const redirectTo = location && location.state && location.state.redirectTo ? location.state.redirectTo : '/onboarding';
+                navigate(redirectTo);
             } else {
                 const msg = resp && resp.message ? resp.message : 'Signup failed';
                 alert(msg);

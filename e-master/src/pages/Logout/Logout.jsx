@@ -14,6 +14,7 @@ const Logout = () => {
     // perform simple logout actions: clear local token (if any), show success message and navigate to login
     try {
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     } catch (e) {
       // ignore
     }

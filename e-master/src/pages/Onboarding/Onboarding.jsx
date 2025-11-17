@@ -293,6 +293,7 @@ const CommitmentStep = ({ formData, onUpdate, onNext, onBack }) => {
 };
 
 const PlanStep = ({ formData }) => {
+    const navigate = useNavigate();
     const [plan, setPlan] = useState('');
     const [isLoading, setIsLoading] = useState(true);
 
@@ -327,6 +328,15 @@ const PlanStep = ({ formData }) => {
                     <div className="plan-display">
                         {/* Using a simple pre tag to render markdown-like text */}
                         <pre className="plan-content">{plan}</pre>
+                    </div>
+                    <div className="finish-container" style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                        <button
+                            type="button"
+                            className="btn-primary"
+                            onClick={() => navigate('/dashboard')}
+                        >
+                            Finish
+                        </button>
                     </div>
                 </div>
             )}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 import '../Homepage/Homepage.css';
@@ -34,6 +34,21 @@ const ChatbotIcon = ({ className }) => ( <svg className={className} xmlns="http:
 
 // --- HEADER ---
 const Header = () => {
+    const navigate = useNavigate();
+
+    const handleProtectedClick = (e, path) => {
+        try {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                e.preventDefault();
+                navigate('/signup', { state: { redirectTo: path } });
+            }
+        } catch (err) {
+            e.preventDefault();
+            navigate('/signup', { state: { redirectTo: path } });
+        }
+    };
+
     return (
         <header className="header">
             <div className="header-container">
@@ -46,11 +61,11 @@ const Header = () => {
                         IELTS
                         <ChevronUpIcon className="nav-chevron" />
                     </a>
-                
-                    <Link to="/roadmap" className="nav-link">Building a Roadmap</Link>
-                    <Link to="/input-testing" className="nav-link">Input Testing</Link>
 
-                    <Link to="/practice-test" className="nav-link">Practice Test</Link>
+                    <Link to="/roadmap" className="nav-link" onClick={(e) => handleProtectedClick(e, '/roadmap')}>Building a Roadmap</Link>
+                    <Link to="/input-testing" className="nav-link" onClick={(e) => handleProtectedClick(e, '/input-testing')}>Input Testing</Link>
+
+                    <Link to="/practice-test" className="nav-link" onClick={(e) => handleProtectedClick(e, '/practice-test')}>Practice Test</Link>
                 </nav>
                 <div className="header-actions">
                     <Link to="/signup" className="btn btn-primary">Sign up</Link>
