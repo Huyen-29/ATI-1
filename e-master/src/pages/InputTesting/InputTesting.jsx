@@ -3,7 +3,7 @@ import "./InputTesting.css";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import { FaRegSmileBeam, FaRegThumbsUp, FaRegSadTear } from "react-icons/fa";
-
+import api from "../../api/api.js";
 const InputTesting = () => {
   const [testsData, setTestsData] = useState({});
   const [selectedSkill, setSelectedSkill] = useState(null);
@@ -14,13 +14,13 @@ const InputTesting = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [visibleExtra, setVisibleExtra] = useState(6);
-
-  // ✅ Load danh sách test từ file JSON
+ const [testList, setTestList] = useState(null);
+//  const[testId, setTest] = useState(null);
   useEffect(() => {
     const loadTestsData = async () => {
       try {
-        const res = await fetch("/data/tests.json");
-        if (!res.ok) throw new Error("Không thể tải file tests.json");
+        const res = await api.test.listTests();
+        if (!res) throw new Error("Không thể tải file tests.json");
         const data = await res.json();
         setTestsData(data);
       } catch (err) {
@@ -31,7 +31,6 @@ const InputTesting = () => {
     loadTestsData();
   }, []);
 
-  // ✅ Xử lý back từng bước (giống PracticeTesting.jsx)
   useEffect(() => {
     const handlePopState = () => {
       if (testContent) {
@@ -47,30 +46,27 @@ const InputTesting = () => {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [selectedSkill, selectedTest, testContent]);
 
-  // ✅ Khi chọn skill
-  const handleSkillClick = (skill) => {
+  const handleSkillClick = async (skill) => {
     setSelectedSkill(skill);
-    setSelectedTest(null);
     setTestContent(null);
     setUserAnswers({});
     setScore(null);
     setVisibleExtra(6);
+    const response = await api.test.getTestsBySkill(skill); 
+    setTestList(Array.isArray(response.data.data) ? response.data.data : []);
     window.history.pushState({}, "", `#${skill}`);
   };
 
   // ✅ Khi chọn test
-  const handleStartTest = async (test) => {
-    setSelectedTest(test);
+  const handleStartTest = async (id) => {
+    setSelectedTest(id);
     setLoading(true);
     setError("");
     setScore(null);
     setUserAnswers({});
     try {
-      const res = await fetch(`/data/${test.file}`);
-      if (!res.ok) throw new Error("Không thể tải dữ liệu bài test này.");
-      const data = await res.json();
-      setTestContent(data);
-      window.history.pushState({}, "", `#${selectedSkill}-test-${test.id}`);
+      const res = await api.test.getTest(id);
+      setTestContent(res.data.data);
     } catch (err) {
       console.error("❌ Lỗi khi tải test:", err);
       setError("Không thể tải nội dung test.");
@@ -80,7 +76,6 @@ const InputTesting = () => {
     }
   };
 
-  // ✅ Lưu đáp án người dùng
   const handleAnswerSelect = (questionIndex, optionIndex) => {
     setUserAnswers((prev) => ({
       ...prev,
@@ -88,22 +83,28 @@ const InputTesting = () => {
     }));
   };
 
-  // ✅ Nộp bài
-  const handleSubmit = () => {
-    if (!testContent?.questions) return;
-    let correct = 0;
-    testContent.questions.forEach((q, index) => {
-      if (userAnswers[index] === q.correct) correct++;
+const handleSubmit = async () => {
+  if (!testContent?.questions) return;
+
+  try {
+    const res = await api.test.gradeTest({
+      testId: selectedTest.id,
+      userAnswers, // {0: 1, 1: 3, ...}
     });
-    const total = testContent.questions.length;
-    setScore({ correct, total });
-  };
+
+    const { correct, total, score } = res.data.data;
+    setScore({ correct, total, score });
+  } catch (err) {
+    console.error(err);
+    setError("Cannot grade test");
+  }
+};
+
 
   const handleLoadMore = () => {
     setVisibleExtra((prev) => prev + 3);
   };
 
-  // ✅ Khi đang làm bài test
   if (testContent) {
     return (
       <div className="input-testing-page">
@@ -194,7 +195,6 @@ const InputTesting = () => {
     );
   }
 
-  // ✅ Khi đang ở màn chọn kỹ năng hoặc test
   return (
     <div className="input-testing-page">
       <Navbar />
@@ -217,7 +217,7 @@ const InputTesting = () => {
                       alt={skill}
                       className="skill-img"
                     />
-                    <h2>{skill.charAt(0).toUpperCase() + skill.slice(1)}</h2>
+                    <h2>{skill.charAt(0).toUpperCase() + skill?.slice(1)}</h2>
                     <p>Practice your {skill} skill effectively.</p>
                     <button
                       className="view-btn"
@@ -242,14 +242,14 @@ const InputTesting = () => {
               </h2>
 
               <div className="test-grid">
-                {testsData[selectedSkill]?.slice(0, visibleExtra).map((t) => (
+                {testList?.slice(0, visibleExtra).map((t) => (
                   <div key={t.id} className="test-card">
                     <h3>{t.name}</h3>
                     <p>{t.desc}</p>
-                    <p className="duration">⏱ {t.duration || 60} minutes</p>
+                    <p className="duration">⏱ {t.duration_minutes || 60} minutes</p>
                     <button
                       className="start-btn"
-                      onClick={() => handleStartTest(t)}
+                      onClick={() => handleStartTest(t.id)}
                     >
                       Start Test
                     </button>

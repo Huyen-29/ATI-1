@@ -2,13 +2,10 @@ import api from '../api/api';
 
 export async function login({ username, password }) {
   try {
-    // Send only one identifier field:
-    // - if input contains '@' treat as email
-    // - otherwise treat as username
+
     const loginData = username.includes('@')
       ? { email: username, password }
       : { username, password };
-    // small debug log for development
     console.debug('authService.login payload:', loginData);
     
     const response = await api.auth.login(loginData);
@@ -23,7 +20,6 @@ export async function login({ username, password }) {
     if (token) {
       localStorage.setItem('token', token);
     } else {
-      // debug: log response so we can inspect shape during development
       console.debug('authService.login: no token found in response', response?.data);
     }
 

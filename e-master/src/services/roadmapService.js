@@ -1,8 +1,5 @@
 import api from '../api/api';
 
-/**
- * Get weekly progress tasks
- */
 export async function getWeeklyTasks() {
   try {
     const response = await api.progress.getWeeklyTasks();
@@ -15,9 +12,7 @@ export async function getWeeklyTasks() {
   }
 }
 
-/**
- * Update user progress
- */
+
 export async function updateProgress(progressData) {
   try {
     const response = await api.progress.updateProgress(progressData);

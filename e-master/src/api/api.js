@@ -44,15 +44,15 @@ const api = {
     gradeSpeaking: (transcript) =>
       axiosClient.post("/grade-speaking", { transcript }),
   },
-
   test: {
-    listTests: () => axiosClient.get("/test"),
-    submitTest: (testId, answers) =>
-      axiosClient.post(`/test/${testId}/submit`, { answers }),
-    getUserSubmissions: () => axiosClient.get("/test/submissions/me"),
-  },
+  listTests: () => axiosClient.get("/test"),
+  getTestsBySkill: skill => axiosClient.get(`/test/skill/${skill}`),
+  getTestDetail: id => axiosClient.get(`/test/${id}`),
+  getTest: id => axiosClient.get(`/test/${id}/test`),
+  getCorrectAnswers: id => axiosClient.get(`/test/${id}/answers`),
+  gradeTest: data => axiosClient.post(`/test/grade`, data),
+},
 
-  // ---------- PROGRESS ----------
   progress: {
     getProgress: () => axiosClient.get("/progress"),
     getWeeklyTasks: () => axiosClient.get("/progress/weekly"),
