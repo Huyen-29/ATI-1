@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 import Navbar from '../../components/Navbar';
+import { updateUserProfile } from '../../services/resourceService';
 
 const CameraIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -28,6 +29,8 @@ const Profile = () => {
     
     const [isEditing, setIsEditing] = useState(false);
     const [avatarPreview, setAvatarPreview] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveError, setSaveError] = useState('');
     const fileInputRef = useRef(null);
     const [initialProfile, setInitialProfile] = useState(profile);
 
@@ -43,17 +46,17 @@ const Profile = () => {
         }
     };
 
-    // Navigate to profile page when avatar clicked (only when not editing)
+    // Avatar click - only trigger edit when in editing mode
     const handleAvatarClick = () => {
-        if (isEditing) return; // don't navigate while editing
-        navigate('/profile');
+        if (isEditing && fileInputRef.current) {
+            fileInputRef.current.click();
+        }
     };
 
     const handleAvatarKeyDown = (e) => {
-        if (isEditing) return;
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (isEditing && (e.key === 'Enter' || e.key === ' ')) {
             e.preventDefault();
-            navigate('/profile');
+            fileInputRef.current?.click();
         }
     };
 
@@ -73,12 +76,27 @@ const Profile = () => {
         setIsEditing(false);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Profile saved:', profile);
-        setIsEditing(false);
-        setAvatarPreview(null);
-        setInitialProfile(profile);
+        setIsSaving(true);
+        setSaveError('');
+        
+        try {
+            const result = await updateUserProfile(profile);
+            if (result.success) {
+                console.log('Profile saved:', result.user);
+                setInitialProfile(profile);
+                setIsEditing(false);
+                setAvatarPreview(null);
+            } else {
+                setSaveError(result.message || 'Failed to save profile');
+            }
+        } catch (err) {
+            setSaveError('Error saving profile. Please try again.');
+            console.error('Profile save error:', err);
+        } finally {
+            setIsSaving(false);
+        }
     };
     
     return (
@@ -89,6 +107,7 @@ const Profile = () => {
             <h1 className="profile-title top">My Profile</h1>
 
             <form onSubmit={handleSubmit}>
+                {saveError && <div className="error-message" style={{color: '#d32f2f', marginBottom: '1rem', padding: '0.5rem', backgroundColor: '#ffebee', borderRadius: '4px'}}>{saveError}</div>}
                 {/* Inline title shown only when editing (moves into the right column) */}
                 <h1 className="profile-title inline">My Profile</h1>
                 <div className="avatar-section">
@@ -106,14 +125,13 @@ const Profile = () => {
                             className="avatar-image"
                         />
                         {isEditing && (
-                             <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                             <div
                                 className="avatar-overlay"
                                 aria-label="Change avatar"
+                                onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
                             >
                                 <CameraIcon />
-                            </button>
+                            </div>
                         )}
                     </div>
                     <input 
@@ -172,12 +190,12 @@ const Profile = () => {
                             <button type="button" onClick={handleCancel} className="btn btn-secondary">
                                 Cancel
                             </button>
-                            <button type="submit" className="btn btn-primary">
-                                Save Changes
+                            <button type="submit" className="btn btn-primary" disabled={isSaving}>
+                                {isSaving ? 'Saving...' : 'Save Changes'}
                             </button>
                         </>
                     ) : (
-                        <button type="button" onClick={handleEditClick} className="btn btn-primary">
+                        <button type="button" onClick={handleEditClick} className="btn btn-primary" disabled={isSaving}>
                             <PencilIcon />
                             Edit Profile
                         </button>

@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { login } from '../../services/authService';
+import api from '../../api/api';
 import './Login.css';
 
 const GoogleIcon = () => (
@@ -14,14 +18,56 @@ const GoogleIcon = () => (
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ username, password, rememberMe });
-    // Handle login logic here
-    navigate('/dashboard');
+    setLoading(true);
+    setError('');
+    
+    try {
+      const result = await login({ username, password });
+      if (result.success) {
+        console.log('Login successful:', result.user);
+        // Ensure token saved before making protected calls
+        const token = result.token || localStorage.getItem('token');
+        if (!token) {
+          setError('Login succeeded but no token received. Please try again or contact support.');
+          setLoading(false);
+          return;
+        }
+
+        // After login, check whether the user already has a generated plan / progress
+        try {
+          const progressResp = await api.progress.getProgress();
+          // if we get data, route to dashboard/progress
+          navigate('/dashboard');
+        } catch (pErr) {
+          // if 404 -> no progress/plan yet, redirect to generate-plan
+          if (pErr.response?.status === 404) {
+            navigate('/user/generate-plan');
+          } else if (pErr.response?.status === 401 || pErr.response?.status === 403) {
+            // session issue - force login
+            setError('Session error. Please login again.');
+            localStorage.removeItem('token');
+          } else {
+            // other errors - go to dashboard as fallback
+            navigate('/dashboard');
+          }
+        }
+      } else {
+        setError(result.message || 'Login failed');
+      }
+    } catch (err) {
+      setError('Connection error. Please check backend server.');
+      console.error('Login error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,6 +88,8 @@ export default function Login() {
       </div>
 
       <form onSubmit={handleSubmit} className="login-form">
+        {error && <div className="error-message" style={{color: '#d32f2f', marginBottom: '1rem', padding: '0.5rem', backgroundColor: '#ffebee', borderRadius: '4px'}}>{error}</div>}
+        
         <div className="form-group">
           <label htmlFor="username" className="form-label">
             User Name or Email
@@ -61,15 +109,25 @@ export default function Login() {
           <label htmlFor="password" className="form-label">
             Password
           </label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="form-input"
-            required
-            aria-label="Password"
-          />
+          <div className="password-input-wrapper">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-input"
+              required
+              aria-label="Password"
+            />
+            <button
+              type="button"
+              className="password-toggle-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              <FontAwesomeIcon icon={faEye} />
+            </button>
+          </div>
         </div>
 
         <div className="form-options">
@@ -89,8 +147,8 @@ export default function Login() {
           </a>
         </div>
 
-        <button type="submit" className="submit-btn">
-          Submit
+        <button type="submit" className="submit-btn" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
       
