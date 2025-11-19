@@ -34,7 +34,7 @@ export default function App() {
       <Route path="/assistant" element={<AIChat />} />
       <Route path="/input-testing" element={<InputTesting />} />
       <Route path="/schedule" element={<Schedule />} />
-      <Route path="/onboarding" element={<Onboarding />} />
+      <Route path="/user/generate-plan" element={<Onboarding />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/logout/success" element={<LogoutSuccess />} />

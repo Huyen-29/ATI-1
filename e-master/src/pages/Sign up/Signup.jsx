@@ -1,8 +1,9 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 import '../Sign up/Signup.css';
-import authService from '../../services/authService';
+import { signup } from '../../services/authService';
 
 const GoogleIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" className="google-icon">
@@ -18,6 +19,8 @@ export default function SignUp() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
     const [isLoading, setIsLoading] = useState(false);
@@ -25,27 +28,29 @@ export default function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        setError('');
 
         try {
-            const resp = await authService.signup({ username, email, password });
+            const resp = await signup({ username, email, password });
             if (resp && resp.success) {
-                // Persist a simple auth flag (mock) and navigate
+                if (resp.token) {
+                    localStorage.setItem('token', resp.token);
+                }
                 try {
                     localStorage.setItem('user', JSON.stringify(resp.user));
                 } catch (err) {
                     console.warn('Could not save user to localStorage', err);
                 }
 
-                // Navigate to onboarding or redirect target if provided
-                const redirectTo = location && location.state && location.state.redirectTo ? location.state.redirectTo : '/onboarding';
+                const redirectTo = location && location.state && location.state.redirectTo ? location.state.redirectTo : '/user/generate-plan';
                 navigate(redirectTo);
             } else {
                 const msg = resp && resp.message ? resp.message : 'Signup failed';
-                alert(msg);
+                setError(msg);
             }
         } catch (err) {
             console.error('Signup error', err);
-            alert('An error occurred while signing up. Please try again.');
+            setError('An error occurred while signing up. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -68,6 +73,7 @@ export default function SignUp() {
                 </div>
 
                 <form onSubmit={handleSubmit}>
+                    {error && <div className="error-message" style={{color: '#d32f2f', marginBottom: '1rem', padding: '0.5rem', backgroundColor: '#ffebee', borderRadius: '4px'}}>{error}</div>}
                     <div className="form-group">
                         <label htmlFor="username" className="form-label">
                             User Name
@@ -84,7 +90,24 @@ export default function SignUp() {
                         <label htmlFor="password" className="form-label">
                             Password
                         </label>
-                        <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-input" required />
+                        <div className="password-input-wrapper">
+                            <input 
+                                id="password" 
+                                type={showPassword ? "text" : "password"} 
+                                value={password} 
+                                onChange={(e) => setPassword(e.target.value)} 
+                                className="form-input" 
+                                required 
+                            />
+                            <button
+                                type="button"
+                                className="password-toggle-btn"
+                                onClick={() => setShowPassword(!showPassword)}
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                            >
+                                <FontAwesomeIcon icon={faEye} />
+                            </button>
+                        </div>
                     </div>
                     <button type="submit" className="submit-btn" disabled={isLoading}>
                         {isLoading ? 'Signing up...' : 'Submit'}

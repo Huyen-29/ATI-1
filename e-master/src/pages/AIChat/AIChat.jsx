@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/Navbar'; 
-import Sidebar from '../../components/Sidebar'; 
+import Sidebar from '../../components/Sidebar';
+import api from '../../api/api';
 import '../AIChat/AIChat.css';
 
 // --- SVG Icons ---
@@ -31,26 +32,20 @@ const AIChat = () => {
             id: 1,
             sender: 'ai',
             text: "Hello! Welcome to your personalized IELTS practice session. I'm here to help you master the skills needed to ace your exam. Let's get started! What's on your mind today? ✨"
-        },
-        {
-            id: 2,
-            sender: 'user',
-            name: 'Danielle',
-            avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-            text: 'How can I structure my answer for an IELTS Speaking Part 2 cue card about a memorable trip?'
         }
     ]);
     const [newMessage, setNewMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [error, setError] = useState('');
 
-    const handleSendMessage = (e) => {
+    const handleSendMessage = async (e) => {
         e.preventDefault();
         if (newMessage.trim() === '') return;
 
         const userMessage = {
             id: messages.length + 1,
             sender: 'user',
-            name: 'Danielle',
+            name: 'User',
             avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
             text: newMessage
         };
@@ -58,17 +53,36 @@ const AIChat = () => {
         setMessages([...messages, userMessage]);
         setNewMessage('');
         setIsTyping(true);
+        setError('');
 
-        // Simulate AI response
-        setTimeout(() => {
+        try {
+            const response = await api.ai.chat(newMessage);
+            
+            // Handle response - support both flat and envelope responses
+            const assistantReply = response.data.payload?.text || response.data.text || response.data;
+            
             const aiResponse = {
                 id: messages.length + 2,
                 sender: 'ai',
-                text: 'Great question! A strong Part 2 answer follows a clear structure. Try using the \'P-P-F\' method: Past (describe the trip), Present (how you feel about it now), and Future (if you\'d like to go back). Would you like to try practicing with a sample cue card?'
+                text: typeof assistantReply === 'string' ? assistantReply : 'I received your message but encountered an issue processing it.'
             };
+            
             setIsTyping(false);
             setMessages(prevMessages => [...prevMessages, aiResponse]);
-        }, 2000);
+        } catch (err) {
+            setIsTyping(false);
+            const errorMessage = err.response?.data?.message || err.message || 'Failed to get response from AI Coach';
+            setError(errorMessage);
+            console.error('Chat error:', err);
+            
+            // Add error message to chat
+            const errorResponse = {
+                id: messages.length + 2,
+                sender: 'ai',
+                text: `Sorry, I encountered an error: ${errorMessage}. Please try again.`
+            };
+            setMessages(prevMessages => [...prevMessages, errorResponse]);
+        }
     };
 
     return (
@@ -162,6 +176,12 @@ const AIChat = () => {
                         </div>
                     </div>
 
+                    {error && (
+                        <div style={{ padding: '1rem', backgroundColor: '#ffebee', color: '#d32f2f', borderRadius: '4px', margin: '1rem' }}>
+                            ⚠️ {error}
+                        </div>
+                    )}
+
                     <div className="message-area">
                         {messages.map(msg => (
                             <div key={msg.id} className={`message ${msg.sender === 'user' ? 'user-message' : 'ai-message'}`}>
@@ -208,8 +228,9 @@ const AIChat = () => {
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
                                 placeholder="Ask your coach anything..."
+                                disabled={isTyping}
                             />
-                            <button type="submit" className="icon-btn send-btn"><SendIcon /></button>
+                            <button type="submit" className="icon-btn send-btn" disabled={isTyping}><SendIcon /></button>
                        </div>
                     </form>
                 </div>

@@ -1,30 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Logout.css';
 import { useNavigate } from 'react-router-dom';
+import api from '../../api/api';
 
 const Logout = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleCancel = () => {
-    // go back to previous page
     navigate(-1);
   };
 
-  const handleLogout = () => {
-    // perform simple logout actions: clear local token (if any), show success message and navigate to login
+  const handleLogout = async () => {
+    setIsLoading(true);
+    setError('');
+    
     try {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-    } catch (e) {
-      // ignore
+      await api.auth.logout();
+      
+      try {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      } catch (e) {
+        console.warn('Could not clear localStorage', e);
+      }
+      
+      navigate('/logout/success');
+    } catch (err) {
+      console.error('Logout error:', err);
+      setError('Failed to logout. Please try again.');
+      setIsLoading(false);
     }
-    // show confirmation to the user
-    // navigate to logout success page
-    navigate('/logout/success');
   };
 
   return (
     <div className="logout-card">
+      {error && <div style={{color: '#d32f2f', marginBottom: '1rem', padding: '0.5rem', backgroundColor: '#ffebee', borderRadius: '4px'}}>{error}</div>}
       <div className="icon-container">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -47,6 +59,7 @@ const Logout = () => {
           onClick={handleCancel}
           className="logout-button cancel-button"
           aria-label="Cancel logout"
+          disabled={isLoading}
         >
           Cancel
         </button>
@@ -54,8 +67,9 @@ const Logout = () => {
           onClick={handleLogout}
           className="logout-button confirm-button"
           aria-label="Confirm logout"
+          disabled={isLoading}
         >
-          Log Out
+          {isLoading ? 'Logging out...' : 'Log Out'}
         </button>
       </div>
     </div>

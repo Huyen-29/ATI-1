@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './BuildingRoadMap.css';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
@@ -78,6 +79,7 @@ const Overview = () => (
 
 // --- LEARNING PATH ---
 const LearningPath = () => {
+    const navigate = useNavigate();
     const [activeLevel, setActiveLevel] = useState('IELTS 4.0 - 4.5');
     const [activeGoal, setActiveGoal] = useState('IELTS 5.0+');
     const levels = ['Basic - IELTS 3.5', 'IELTS 4.0 - 4.5', 'IELTS 5.0 - 5.5', 'IELTS 6.0 - 6.5'];
@@ -108,6 +110,16 @@ const LearningPath = () => {
                             </div>
                         </div>
                         <p className="entrance-test-link">Not sure about your level? <a href="#">Take the entrance test</a></p>
+                        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                            <button
+                                type="button"
+                                className="cta-button"
+                                onClick={() => navigate('/user/generate-plan')}
+                                style={{ padding: '10px 18px', borderRadius: 8, border: 'none', background: '#4C82F7', color: '#fff', cursor: 'pointer' }}
+                            >
+                                Generate
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

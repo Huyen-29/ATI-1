@@ -1,19 +1,64 @@
-// Simple mock auth service. Replace with real API calls when backend is ready.
-export async function signup({ username, email, password }) {
-  // Simulate network latency
-  await new Promise((res) => setTimeout(res, 600));
+import api from '../api/api';
 
-  // Basic client-side validation (demo)
-  if (!email || !password) {
-    return { success: false, message: 'Email and password are required' };
+export async function login({ username, password }) {
+  try {
+    // Send only one identifier field:
+    // - if input contains '@' treat as email
+    // - otherwise treat as username
+    const loginData = username.includes('@')
+      ? { email: username, password }
+      : { username, password };
+    // small debug log for development
+    console.debug('authService.login payload:', loginData);
+    
+    const response = await api.auth.login(loginData);
+    // Try to find token in common response shapes
+    const token = response?.data?.token
+      || response?.data?.accessToken
+      || response?.data?.access_token
+      || response?.data?.data?.token
+      || response?.data?.data?.accessToken
+      || response?.data?.data?.access_token;
+
+    if (token) {
+      localStorage.setItem('token', token);
+    } else {
+      // debug: log response so we can inspect shape during development
+      console.debug('authService.login: no token found in response', response?.data);
+    }
+
+    return { success: true, user: response.data.user, token };
+  } catch (error) {
+    return { 
+      success: false, 
+      message: error.response?.data?.message || 'Login failed' 
+    };
   }
-
-  // In a real app you'd POST to your backend here, e.g.:
-  // const resp = await fetch('/api/signup', { method: 'POST', body: JSON.stringify({ username, email, password }), headers: { 'Content-Type': 'application/json' } });
-  // return await resp.json();
-
-  // Mock successful response
-  return { success: true, user: { id: Date.now(), username, email } };
 }
 
-export default { signup };
+export async function signup({ username, email, password }) {
+  try {
+    const response = await api.auth.register({ username, email, password });
+    const token = response?.data?.token
+      || response?.data?.accessToken
+      || response?.data?.access_token
+      || response?.data?.data?.token
+      || response?.data?.data?.accessToken
+      || response?.data?.data?.access_token;
+
+    if (token) {
+      localStorage.setItem('token', token);
+    } else {
+      console.debug('authService.signup: no token found in response', response?.data);
+    }
+
+    return { success: true, user: response.data.user, token };
+  } catch (error) {
+    return { 
+      success: false, 
+      message: error.response?.data?.message || 'Signup failed' 
+    };
+  }
+}
+
+export default { login, signup };

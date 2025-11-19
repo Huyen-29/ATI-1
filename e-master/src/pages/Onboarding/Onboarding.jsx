@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { generateStudyPlan } from '../../services/aiService';
 import '../Onboarding/Onboarding.css'
+import { useLocation } from 'react-router-dom';
 
 // --- Enums and Types ---
 const TestType = {
@@ -34,17 +36,7 @@ const AppLogo = ({ className }) => (
     </svg>
 );
 
-// --- Gemini Service ---
-// NOTE: The original implementation used a server-side AI client which is not safe
-// to initialize from browser code. Replace with a safe stub that returns a
-// placeholder plan. Later this can be wired to a backend API to call the real
-// AI service securely.
-const generateStudyPlan = async (formData) => {
-    // Small delay to simulate network / generation time
-    await new Promise((res) => setTimeout(res, 600));
 
-    return `Personalized 4-week plan for ${formData.testType} (placeholder):\n\nWeek 1:\n- Day 1: Diagnostic test and review (1 hr)\n- Day 2: Listening practice (1 hr)\n...\n\n(Real plan generation is disabled in the client. Connect this to a backend service to enable AI-generated plans.)`;
-};
 
 // --- Reusable Components ---
 const StepIndicator = ({ currentStep }) => {
@@ -261,7 +253,7 @@ const CommitmentStep = ({ formData, onUpdate, onNext, onBack }) => {
         <div className="step-card fade-in">
             <StepIndicator currentStep={4} />
             <h2 className="title">Your Study Commitment</h2>
-            <p className="subtitle">How many hours per week can you dedicate to studying?</p>
+            <p className="subtitle">How much time can you dedicate to achieving your goal?</p>
             
             <div className="input-box">
                  <div className="input-box-header">
@@ -287,6 +279,30 @@ const CommitmentStep = ({ formData, onUpdate, onNext, onBack }) => {
                 </p>
             </div>
 
+            <div className="input-box" style={{ marginTop: '2rem' }}>
+                 <div className="input-box-header">
+                    <label htmlFor="targetWeeks" className="input-label">
+                        Target Duration
+                    </label>
+                    <span className="value-display">
+                        {formData.targetWeeks} weeks
+                    </span>
+                </div>
+                <input
+                    type="range"
+                    id="targetWeeks"
+                    min="2"
+                    max="24"
+                    step="1"
+                    value={formData.targetWeeks}
+                    onChange={(e) => onUpdate({ targetWeeks: parseInt(e.target.value, 10) })}
+                    className="slider"
+                />
+                <p className="input-box-footer">
+                    How many weeks do you want to spend to achieve your goal?
+                </p>
+            </div>
+
             <NavigationButtons onBack={onBack} onNext={onNext} />
         </div>
     );
@@ -296,13 +312,37 @@ const PlanStep = ({ formData }) => {
     const navigate = useNavigate();
     const [plan, setPlan] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchPlan = async () => {
             setIsLoading(true);
-            const generatedPlan = await generateStudyPlan(formData);
-            setPlan(generatedPlan);
-            setIsLoading(false);
+            setError('');
+           try {
+                const result = await generateStudyPlan(formData);
+                
+                if (result.success) {
+                    // CẦN KIỂM TRA & SỬA Ở ĐÂY:
+                    // 1. Lấy ra đối tượng plan (là một object)
+                    const planObject = result.plan; 
+                    
+                    // 2. Chuyển đối tượng này thành chuỗi JSON đẹp
+                    const planString = JSON.stringify(planObject, null, 2); 
+                    
+                    setPlan(planString); // <-- Lưu CHUỖI vào state
+                } else {
+                    // ... (xử lý lỗi)
+                    setError(result.message || 'Failed to generate plan');
+                }
+            } catch (err) {
+                // ... (xử lý lỗi catch)
+                const serverMsg = err.response?.data?.message || err.message || 'Error generating plan. Please try again.';
+
+                setError(serverMsg); 
+                console.error('Plan generation error:', err);
+            } finally {
+                setIsLoading(false);
+            }
         };
 
         fetchPlan();
@@ -316,15 +356,32 @@ const PlanStep = ({ formData }) => {
         </div>
     );
 
+    const ErrorState = () => (
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#d32f2f' }}>
+            <h2 className="title">Oops! Something went wrong</h2>
+            <p className="subtitle">{error}</p>
+            <button
+                type="button"
+                className="btn-primary"
+                onClick={() => window.location.reload()}
+                style={{ marginTop: '1rem' }}
+            >
+                Try Again
+            </button>
+        </div>
+    );
+
     return (
         <div className="step-card fade-in">
             <StepIndicator currentStep={5} />
             {isLoading ? (
                 <LoadingState />
+            ) : error ? (
+                <ErrorState />
             ) : (
                 <div>
                     <h2 className="title">Your Custom Study Plan</h2>
-                    <p className="subtitle">Here is your 4-week plan to achieve your {formData.testType} goals!</p>
+                    <p className="subtitle">Here is your personalized {formData.targetWeeks}-week plan to achieve your {formData.testType} goal!</p>
                     <div className="plan-display">
                         {/* Using a simple pre tag to render markdown-like text */}
                         <pre className="plan-content">{plan}</pre>
@@ -337,6 +394,18 @@ const PlanStep = ({ formData }) => {
                         >
                             Finish
                         </button>
+                        <button
+                            type="button"
+                            className="btn-secondary"
+                            onClick={() => {
+                                // allow skipping plan generation: go to homepage and mark skipped
+                                try { localStorage.setItem('skippedGeneratePlan', '1'); } catch (e) {}
+                                navigate('/');
+                            }}
+                            style={{ marginLeft: '1rem' }}
+                        >
+                            Skip and go to Homepage
+                        </button>
                     </div>
                 </div>
             )}
@@ -345,6 +414,7 @@ const PlanStep = ({ formData }) => {
 };
 
 // --- Main App Component ---
+
 const App = () => {
     const [step, setStep] = useState(0);
     const [formData, setFormData] = useState({
@@ -355,7 +425,10 @@ const App = () => {
             speaking: SkillLevel.Beginner,
         },
         hoursPerWeek: 5,
+        targetWeeks: 12,
     });
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const handleNext = useCallback(() => {
         setStep(prev => prev + 1);
@@ -392,6 +465,19 @@ const App = () => {
         <main className="main-container">
             <div className="content-wrapper">
                 {renderStep()}
+                {/* Show Generate button only when not already on the generate-plan route */}
+                {location?.pathname !== '/user/generate-plan' && (
+                    <div style={{ textAlign: 'center', marginTop: '1.25rem' }}>
+                        <button
+                            type="button"
+                            className="btn-generate"
+                            onClick={() => navigate('/user/generate-plan')}
+                            style={{ padding: '10px 18px', borderRadius: 8, border: 'none', background: '#4C82F7', color: '#fff', cursor: 'pointer' }}
+                        >
+                            Generate
+                        </button>
+                    </div>
+                )}
             </div>
         </main>
     );
