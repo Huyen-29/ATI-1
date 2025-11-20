@@ -58,7 +58,6 @@ const AIChat = () => {
         try {
             const response = await api.ai.chat(newMessage);
             
-            // Handle response - support both flat and envelope responses
             const assistantReply = response.data.payload?.text || response.data.text || response.data;
             
             const aiResponse = {
