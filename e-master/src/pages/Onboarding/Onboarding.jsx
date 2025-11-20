@@ -5,7 +5,7 @@ import '../Onboarding/Onboarding.css'
 import { useLocation } from 'react-router-dom';
 
 // --- Enums and Types ---
-const TestType = {
+const reason = {
   IELTS: 'IELTS',
   TOEIC: 'TOEIC',
 };
@@ -105,7 +105,7 @@ const TestSelectionStep = ({ formData, onUpdate, onNext, onBack }) => {
         >
             <h3 className="test-option-title">{name}</h3>
             <p className="test-option-description">
-                {name === TestType.IELTS ? 'International English Language Testing System' : 'Test of English for International Communication'}
+                {name === reason.IELTS ? 'International English Language Testing System' : 'Test of English for International Communication'}
             </p>
         </button>
     );
@@ -118,24 +118,24 @@ const TestSelectionStep = ({ formData, onUpdate, onNext, onBack }) => {
             
             <div className="options-container">
                 <TestOption
-                    name={TestType.IELTS}
-                    isSelected={formData.testType === TestType.IELTS}
-                    onClick={() => onUpdate({ testType: TestType.IELTS })}
+                    name={reason.IELTS}
+                    isSelected={formData.reason === reason.IELTS}
+                    onClick={() => onUpdate({ reason: reason.IELTS })}
                 />
                 <TestOption
-                    name={TestType.TOEIC}
-                    isSelected={formData.testType === TestType.TOEIC}
-                    onClick={() => onUpdate({ testType: TestType.TOEIC })}
+                    name={reason.TOEIC}
+                    isSelected={formData.reason === reason.TOEIC}
+                    onClick={() => onUpdate({ reason: reason.TOEIC })}
                 />
             </div>
             
-            <NavigationButtons onBack={onBack} onNext={onNext} isNextDisabled={!formData.testType} />
+            <NavigationButtons onBack={onBack} onNext={onNext} isNextDisabled={!formData.reason} />
         </div>
     );
 };
 
 const GoalStep = ({ formData, onUpdate, onNext, onBack }) => {
-    const isIELTS = formData.testType === TestType.IELTS;
+    const isIELTS = formData.reason === reason.IELTS;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -156,7 +156,7 @@ const GoalStep = ({ formData, onUpdate, onNext, onBack }) => {
         <div className="step-card fade-in">
             <StepIndicator currentStep={2} />
             <h2 className="title">What's Your Goal?</h2>
-            <p className="subtitle">What score are you aiming for on the {formData.testType} test?</p>
+            <p className="subtitle">What score are you aiming for on the {formData.reason} test?</p>
 
             <div className="input-box">
                  <div className="input-box-header">
@@ -314,39 +314,56 @@ const PlanStep = ({ formData }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        const fetchPlan = async () => {
-            setIsLoading(true);
-            setError('');
-           try {
-                const result = await generateStudyPlan(formData);
-                
-                if (result.success) {
-                    // CẦN KIỂM TRA & SỬA Ở ĐÂY:
-                    // 1. Lấy ra đối tượng plan (là một object)
-                    const planObject = result.plan; 
-                    
-                    // 2. Chuyển đối tượng này thành chuỗi JSON đẹp
-                    const planString = JSON.stringify(planObject, null, 2); 
-                    
-                    setPlan(planString); // <-- Lưu CHUỖI vào state
-                } else {
-                    // ... (xử lý lỗi)
-                    setError(result.message || 'Failed to generate plan');
-                }
-            } catch (err) {
-                // ... (xử lý lỗi catch)
-                const serverMsg = err.response?.data?.message || err.message || 'Error generating plan. Please try again.';
+useEffect(() => {
+    const fetchPlan = async () => {
+        setIsLoading(true);
+        setError('');
+        try {
+            const result = await generateStudyPlan(formData);
 
-                setError(serverMsg); 
-                console.error('Plan generation error:', err);
-            } finally {
-                setIsLoading(false);
+            if (result.success) {
+                const rawPlan = result.plan; // giả sử plan dạng JSON
+
+                // --- Chuyển JSON thành text đẹp ---
+                const formatPlan = (planObj) => {
+                    if (!planObj?.weekly_plan) return '';
+
+                    let text = `${planObj.summary}\n\n`;
+                    planObj.weekly_plan.forEach((week) => {
+                        text += `Week ${week.week}:\n`;
+                        text += `  Goals:\n`;
+                        week.goals.forEach(g => text += `    - ${g}\n`);
+                        text += `  Skills Focus: ${week.skills_focus.join(', ')}\n`;
+                        if (week.resources?.length) {
+                            text += `  Resources:\n`;
+                            week.resources.forEach(r => {
+                                text += `    - ${r.title}${r.url ? `: ${r.url}` : ''}\n`;
+                            });
+                        }
+                        text += `  Assignments:\n`;
+                        week.assignments.forEach(a => text += `    - ${a}\n`);
+                        text += `\n`;
+                    });
+                    return text;
+                };
+
+                setPlan(formatPlan(rawPlan));
+
+            } else {
+                setError(result.message || 'Failed to generate plan');
             }
-        };
+        } catch (err) {
+            const serverMsg = err.response?.data?.message || err.message || 'Error generating plan. Please try again.';
+            setError(serverMsg);
+            console.error('Plan generation error:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-        fetchPlan();
-    }, [formData]);
+    fetchPlan();
+}, [formData]);
+
     
     const LoadingState = () => (
         <div className="loading-state">
@@ -381,9 +398,8 @@ const PlanStep = ({ formData }) => {
             ) : (
                 <div>
                     <h2 className="title">Your Custom Study Plan</h2>
-                    <p className="subtitle">Here is your personalized {formData.targetWeeks}-week plan to achieve your {formData.testType} goal!</p>
+                    <p className="subtitle">Here is your personalized {formData.targetWeeks}-week plan to achieve your {formData.reason} goal!</p>
                     <div className="plan-display">
-                        {/* Using a simple pre tag to render markdown-like text */}
                         <pre className="plan-content">{plan}</pre>
                     </div>
                     <div className="finish-container" style={{ marginTop: '1.5rem', textAlign: 'center' }}>
@@ -398,7 +414,6 @@ const PlanStep = ({ formData }) => {
                             type="button"
                             className="btn-secondary"
                             onClick={() => {
-                                // allow skipping plan generation: go to homepage and mark skipped
                                 try { localStorage.setItem('skippedGeneratePlan', '1'); } catch (e) {}
                                 navigate('/');
                             }}
@@ -483,7 +498,5 @@ const App = () => {
     );
 };
 
-// Export the App component so it can be used as a route target. Do NOT mount
-// the component here — the application router will render it when the
-// user navigates to /onboarding.
+
 export default App;
